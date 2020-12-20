@@ -2,7 +2,7 @@
   "name": "ianm/follow-users",
   "description": "Follow users and be notified of new discussions",
   "keywords": [
-    "flarum"
+    "flarum", "subscribe", "following", "friends"
   ],
   "type": "flarum-extension",
   "license": "MIT",
