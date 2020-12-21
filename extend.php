@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) 2020 Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers;
 
 use Flarum\Api\Controller\ListUsersController;
@@ -14,10 +24,6 @@ use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Extend;
 use Flarum\User\Event\Saving;
 use Flarum\User\User;
-use IanM\FollowUsers\Access;
-use IanM\FollowUsers\Gambits;
-use IanM\FollowUsers\Listeners;
-use IanM\FollowUsers\Notifications;
 use Illuminate\Events\Dispatcher;
 
 return [
@@ -32,11 +38,11 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
-        ->relationship('followedUsers', function(AbstractModel $model){
+        ->relationship('followedUsers', function (AbstractModel $model) {
             return $model->belongsToMany(User::class, 'user_followers', 'user_id', 'followed_user_id')
                 ->withTimestamps();
         })
-        ->relationship('followedBy', function(AbstractModel $model) {
+        ->relationship('followedBy', function (AbstractModel $model) {
             return $model->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id');
         }),
 
@@ -74,6 +80,7 @@ return [
         ->mutate(function (UserSerializer $serializer, User $user, array $attributes): array {
             $attributes['followed'] = $serializer->getActor()->followedUsers->contains($user);
             $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
+
             return $attributes;
         }),
 
@@ -81,6 +88,7 @@ return [
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
             $actor = $request->getAttribute('actor');
             $actor->load('followedUsers');
+
             return $data;
         })
         ->addInclude(['followedUsers', 'followedBy']),

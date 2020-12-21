@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) 2020 Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Jobs;
 
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Post;
-use Flarum\User\User;
 use IanM\FollowUsers\Notifications\NewPostByUserBlueprint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) 2020 Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Jobs;
 
 use Flarum\Notification\Notification;
@@ -12,7 +22,8 @@ use Illuminate\Queue\SerializesModels;
 
 class SendNotificationWhenUserIsUnfollowed implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var User

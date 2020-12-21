@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) 2020 Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Access;
 
 use Flarum\User\AbstractPolicy;
@@ -13,8 +23,9 @@ class UserPolicy extends AbstractPolicy
     protected $model = User::class;
 
     /**
-     * @param  User $actor
-     * @param  User $user
+     * @param User $actor
+     * @param User $user
+     *
      * @return bool|null
      */
     public function follow(User $actor, User $user)
