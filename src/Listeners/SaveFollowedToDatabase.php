@@ -46,7 +46,7 @@ class SaveFollowedToDatabase
             $followed = (bool) $attributes['followed'];
 
             $changed = false;
-            $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
+            $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists;
 
             if ($followed) {
                 if (!$exists) {
