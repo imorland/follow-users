@@ -40,7 +40,7 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
-        if (!$this->post->exists) {
+        if (!$this->post || !$this->post->exists || null === $this->post->user->followedBy) {
             return;
         }
 
@@ -48,8 +48,6 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
          * @var Collection
          */
         $discussion = $this->post->discussion;
-
-        $ian = $this->post->user->followedBy();
 
         /**
          * @var Collection
