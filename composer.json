@@ -13,7 +13,7 @@
   },
   "require": {
     "flarum/core": "^0.1.0-beta.15",
-    "fof/follow-tags": "^0.6.2"
+    "fof/follow-tags": "^0.6.4"
   },
   "authors": [
     {
