@@ -54,7 +54,7 @@ class QueueNotificationJobs
 
     public function whenPostCreated(Posted $event)
     {
-        if (!$event->post->discussion->exists || $event->post->number == 1) {
+        if (!$event->post->exists || !$event->post->discussion->exists || $event->post->number == 1) {
             return;
         }
 
