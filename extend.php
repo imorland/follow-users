@@ -28,14 +28,14 @@ use Illuminate\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/resources/less/forum.less')
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum.less')
         ->route('/followedUsers', 'followed.users.view'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->js(__DIR__ . '/js/dist/admin.js'),
 
-    new Extend\Locales(__DIR__.'/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\Model(User::class))
         ->relationship('followedUsers', function (AbstractModel $model) {
@@ -47,7 +47,7 @@ return [
         }),
 
     (new Extend\View())
-        ->namespace('ianm-follow-users', __DIR__.'/resources/views'),
+        ->namespace('ianm-follow-users', __DIR__ . '/resources/views'),
 
     (new Extend\Notification())
         ->type(Notifications\NewFollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
@@ -94,5 +94,11 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowUserController::class))
+        ->prepareDataForSerialization(function (ShowUserController $controller, $data, $request) {
+            $actor = $request->getAttribute('actor');
+            $actor->load('followedUsers');
+
+            return $data;
+        })
         ->addInclude(['followedUsers', 'followedBy']),
 ];
