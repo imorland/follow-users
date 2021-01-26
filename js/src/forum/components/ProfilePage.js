@@ -17,7 +17,7 @@ export default class ProfilePage extends UserPage {
 
     content() {
         return (
-            <table className="NotificationGrid">
+            <table className="NotificationGrid followPage-grid">
                 {this.followedUsers.map((user, i) => {
                     var unfollow = () => {
                         if (confirm(app.translator.trans(`ianm-follow-users.forum.user_controls.unfollow_confirmation`))) {
