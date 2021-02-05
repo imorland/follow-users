@@ -33,7 +33,7 @@
       "category": "feature",
       "icon": {
         "name": "fas fa-user-friends",
-        "backgroundColor": "#00a7e3",
+        "backgroundColor": "#0072e3",
         "color": "#fff"
       }
     },
