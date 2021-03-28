@@ -20,11 +20,10 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Database\AbstractModel;
 use Flarum\Discussion\Event as DiscussionEvent;
-use Flarum\Event\ConfigureDiscussionGambits;
+use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\User\Event\Saving;
 use Flarum\User\User;
-use Illuminate\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('forum'))
@@ -60,24 +59,22 @@ return [
         ->listen(DiscussionEvent\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(DiscussionEvent\Hidden::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(DiscussionEvent\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class)
-        ->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
-            $event->gambits->add(Gambits\FollowUsersGambit::class);
-        }),
+        ->subscribe(Listeners\QueueNotificationJobs::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilter(Query\FollowUsersFilter::class),
 
     (new Extend\User())
         ->registerPreference('blocksFollow', 'boolval', false),
 
-    (function (Dispatcher $events) {
-        $events->subscribe(Listeners\QueueNotificationJobs::class);
-
-        $events->subscribe(Access\UserPolicy::class);
-    }),
+    (new Extend\Policy())
+        ->modelPolicy(User::class, Access\UserPolicy::class),
 
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
         ->hasMany('followedUsers', UserSerializer::class),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->mutate(function (UserSerializer $serializer, User $user, array $attributes): array {
+        ->attributes(function (UserSerializer $serializer, User $user, array $attributes): array {
             $attributes['followed'] = $serializer->getActor()->followedUsers->contains($user);
             $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
 

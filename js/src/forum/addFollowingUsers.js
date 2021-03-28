@@ -1,6 +1,6 @@
-import { extend } from 'flarum/extend';
+import { extend } from 'flarum/common/extend';
 import * as follow_tags from '@fof-follow-tags';
-import DiscussionListState from 'flarum/states/DiscussionListState';
+import DiscussionListState from 'flarum/common/states/DiscussionListState';
 import followingPageOptions from '../common/helpers/followingPageOptions';
 
 export default function () {
@@ -13,20 +13,16 @@ export default function () {
         extend(DiscussionListState.prototype, 'requestParams', function (params) {
             if (!follow_tags.utils.isFollowingPage() || !app.session.user) return;
 
-            let q = params.filter.q || '';
-
             if (!this.followTags) {
                 this.followTags = follow_tags.utils.getDefaultFollowingFiltering();
             }
+
             const followTags = this.followTags;
 
-            if (app.current.get('routeName') === 'following' && followTags) {
-                if (followTags === 'users') {
-                    q += ' is:following-users';
-                    q = q.replace(' is:following', '');
-                }
+            if (app.current.get('routeName') === 'following' && followTags === 'users') {
+                params.filter['following-users'] = true;
 
-                params.filter.q = q;
+                delete params.filter.subscription;
             }
         });
     }

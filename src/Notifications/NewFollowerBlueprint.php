@@ -15,7 +15,7 @@ namespace IanM\FollowUsers\Notifications;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
 {

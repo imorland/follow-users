@@ -1,8 +1,8 @@
-import { extend } from 'flarum/extend';
-import NotificationGrid from 'flarum/components/NotificationGrid';
+import { extend } from 'flarum/common/extend';
+import NotificationGrid from 'flarum/common/components/NotificationGrid';
 
-import Model from 'flarum/Model';
-import User from 'flarum/models/User';
+import Model from 'flarum/common/Model';
+import User from 'flarum/common/models/User';
 import addFollowControls from './addFollowControls';
 import addProfilePage from './addProfilePage';
 import ProfilePage from './components/ProfilePage';
