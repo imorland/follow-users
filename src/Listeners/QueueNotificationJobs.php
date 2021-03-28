@@ -62,7 +62,7 @@ class QueueNotificationJobs
             if (!$post->exists || !$post->discussion->exists || $post->number == 1) {
                 return;
             }
-    
+
             resolve('flarum.queue.connection')->push(
                 new Jobs\SendNotificationWhenFollowerPosted($post, $post->discussion->last_post_number)
             );

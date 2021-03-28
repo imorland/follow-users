@@ -15,7 +15,6 @@ namespace IanM\FollowUsers\Query;
 use Flarum\Discussion\Search\DiscussionSearch;
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
-use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
 use Flarum\Subscriptions\Gambit\SubscriptionGambit;
 use Flarum\User\User;
