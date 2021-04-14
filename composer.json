@@ -36,9 +36,9 @@
         "backgroundColor": "#0072e3",
         "color": "#fff"
       },
-      "optional-dependencies": {
-        "fof/follow-tags": "*"
-      }
+      "optional-dependencies": [
+        "fof/follow-tags"
+      ]
     },
     "flagrow": {
       "discuss": "https://discuss.flarum.org/d/25701"
