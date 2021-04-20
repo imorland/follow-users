@@ -19,12 +19,17 @@ class UserPolicy extends AbstractPolicy
 {
     public function follow(User $actor, User $user)
     {
+        // admins may follow any user
         if ($actor->isAdmin()) {
             return $this->allow();
         }
 
+        // prevent following self, a user who blocks following, or a user who does not have permission
         if ($user->id === $actor->id || $user->preferences['blocksFollow'] || !$user->hasPermission('user.beFollowed')) {
             return $this->deny();
         }
+
+        // otherwise allow following
+        return $this->allow();
     }
 }
