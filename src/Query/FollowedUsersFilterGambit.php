@@ -71,7 +71,7 @@ class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInt
     {
         $query->where(function ($query) use ($actor, $negate) {
             if ($negate) {
-                $query->where('suspended_until', null)->orWhere('suspended_until', '<', Carbon::now());
+                $query->whereNotIn('id', $actor->followedUsers()->pluck('id'));
             } else {
                 $query->whereIn('id', $actor->followedUsers()->pluck('id'));
             }
