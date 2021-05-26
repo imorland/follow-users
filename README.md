@@ -13,6 +13,7 @@ Building on top of `fof/follow-tags`, this extension allows for following of ind
 - Permission for which groups can be followed
 - User preference to block followers
 - Notifications for 'Followed', 'Unfollowed', 'Followed User Started Discussion' and 'Followed User Posted'
+- [Developers] events dispatched for `Following` and `Unfollowing`
 
 ##### Discussion list
 ![image](https://user-images.githubusercontent.com/16573496/102770472-2161df00-437c-11eb-8274-6f73d58b1042.png)
@@ -28,10 +29,10 @@ Building on top of `fof/follow-tags`, this extension allows for following of ind
 
 ### Installation
 
-Install manually with composer:
+Install with composer:
 
 ```sh
-composer require ianm/follow-users
+composer require ianm/follow-users:"*"
 ```
 
 `fof/follow-tags` *must* be enabled *before* this extension is enabled.
