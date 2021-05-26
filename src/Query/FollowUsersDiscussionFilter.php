@@ -18,7 +18,7 @@ use Flarum\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Builder;
 
-class FollowUsersFilter implements FilterInterface
+class FollowUsersDiscussionFilter implements FilterInterface
 {
     public function getFilterKey(): string
     {

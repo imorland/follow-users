@@ -23,6 +23,7 @@ use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\User\Event\Saving;
+use Flarum\User\Filter\UserFilterer;
 use Flarum\User\User;
 
 return [
@@ -62,7 +63,7 @@ return [
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Query\FollowUsersFilter::class),
+        ->addFilter(Query\FollowUsersDiscussionFilter::class),
 
     (new Extend\User())
         ->registerPreference('blocksFollow', 'boolval', false),
