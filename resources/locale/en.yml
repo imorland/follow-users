@@ -32,6 +32,9 @@ ianm-follow-users:
     badge:
       label: Followed user
 
+    filter:
+      following: Followed users
+
   email:
     new_discussion_by_user_subject: "[Follow User] {title}"
     new_follower_subject: "[Follow User] You have a new follower!"

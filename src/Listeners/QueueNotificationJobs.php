@@ -3,7 +3,7 @@
 /*
  * This file is part of ianm/follow-users
  *
- *  Copyright (c) 2020 Ian Morland.
+ *  Copyright (c) Ian Morland.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ namespace IanM\FollowUsers\Listeners;
 use Flarum\Approval\Event\PostWasApproved;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Started;
-use Flarum\Post\Event\Posted;
+use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
 use IanM\FollowUsers\Events\Following;
 use IanM\FollowUsers\Events\Unfollowing;
@@ -29,7 +29,7 @@ class QueueNotificationJobs
         $events->listen(Following::class, [$this, 'whenFollowed']);
         $events->listen(Unfollowing::class, [$this, 'whenUnfollowed']);
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
-        $events->listen(Posted::class, [$this, 'whenPostCreated']);
+        $events->listen(PostSaving::class, [$this, 'whenPostCreated']);
         //$events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
     }
 
@@ -56,7 +56,7 @@ class QueueNotificationJobs
         });
     }
 
-    public function whenPostCreated(Posted $event)
+    public function whenPostCreated(PostSaving $event)
     {
         $event->post->afterSave(function (Post $post) {
             if (!$post->exists || !$post->discussion->exists || $post->number == 1) {

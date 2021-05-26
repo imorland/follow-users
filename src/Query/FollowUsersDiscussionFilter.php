@@ -3,7 +3,7 @@
 /*
  * This file is part of ianm/follow-users
  *
- *  Copyright (c) 2020 Ian Morland.
+ *  Copyright (c) Ian Morland.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use Flarum\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Builder;
 
-class FollowUsersFilter implements FilterInterface
+class FollowUsersDiscussionFilter implements FilterInterface
 {
     public function getFilterKey(): string
     {

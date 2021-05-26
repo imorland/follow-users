@@ -1,7 +1,9 @@
 import { extend } from 'flarum/common/extend';
 import * as follow_tags from '@fof-follow-tags';
+import * as user_directory from '@fof-user-directory';
 import DiscussionListState from 'flarum/common/states/DiscussionListState';
 import followingPageOptions from '../common/helpers/followingPageOptions';
+import Separator from 'flarum/common/components/Separator';
 
 export default function () {
     if (app.initializers.has('fof/follow-tags')) {
@@ -24,6 +26,35 @@ export default function () {
 
                 delete params.filter.subscription;
             }
+        });
+    }
+
+    if (app.initializers.has('fof-user-directory')) {
+        extend(user_directory.UserDirectoryPage.prototype, 'groupItems', function (items) {
+            items.add(
+                'follow-users',
+                user_directory.CheckableButton.component(
+                    {
+                        className: 'GroupFilterButton',
+                        icon: 'fas fa-user-friends',
+                        checked: this.enabledSpecialGroupFilters['ianm-follow-users'] === 'is:followeduser',
+                        onclick: () => {
+                            const id = 'ianm-follow-users';
+                            if (this.enabledSpecialGroupFilters[id] === 'is:followeduser') {
+                                this.enabledSpecialGroupFilters[id] = '';
+                            } else {
+                                this.enabledSpecialGroupFilters[id] = 'is:followeduser';
+                            }
+
+                            this.changeParams(this.params().sort);
+                        },
+                    },
+                    app.translator.trans('ianm-follow-users.forum.filter.following')
+                ),
+                65
+            );
+
+            items.add('seperator', Separator.component(), 50);
         });
     }
 }

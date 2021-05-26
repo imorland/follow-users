@@ -7,18 +7,23 @@ A [Flarum](http://flarum.org) extension. Follow users and be notified of new dis
 Building on top of `fof/follow-tags`, this extension allows for following of individual users.
 
 ### Features
-- Requires Flarum beta 15 or above
 - Adds a 'Followed User' badge to users that _you_ follow, forum wide
 - Adds A 'Followed Users' filter to the following filter
 - Permission for which groups can be followed
 - User preference to block followers
 - Notifications for 'Followed', 'Unfollowed', 'Followed User Started Discussion' and 'Followed User Posted'
+- Integration with `fof/user-directory`
+- Provides a search gambit `is:followeduser`
+- [Developers] events dispatched for `Following` and `Unfollowing`
 
 ##### Discussion list
 ![image](https://user-images.githubusercontent.com/16573496/102770472-2161df00-437c-11eb-8274-6f73d58b1042.png)
 
 ##### Following dropdown
 ![image](https://user-images.githubusercontent.com/16573496/102770549-40f90780-437c-11eb-801e-a7fb9e08e704.png)
+
+##### `fof/user-directory` integration
+![image](https://user-images.githubusercontent.com/16573496/119695069-ba25ea80-be45-11eb-9f0e-ff7545f29261.png)
 
 ##### Notification preferences
 ![image](https://user-images.githubusercontent.com/16573496/102770611-55d59b00-437c-11eb-8d57-408770c34d69.png)
@@ -28,10 +33,10 @@ Building on top of `fof/follow-tags`, this extension allows for following of ind
 
 ### Installation
 
-Install manually with composer:
+Install with composer:
 
 ```sh
-composer require ianm/follow-users
+composer require ianm/follow-users:"*"
 ```
 
 `fof/follow-tags` *must* be enabled *before* this extension is enabled.
