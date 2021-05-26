@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Query;
 
 use Carbon\Carbon;
@@ -7,7 +17,6 @@ use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\SearchState;
-use Flarum\User\Guest;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Query\Builder;
