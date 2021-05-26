@@ -37,7 +37,8 @@
         "color": "#fff"
       },
       "optional-dependencies": [
-        "fof/follow-tags"
+        "fof/follow-tags",
+        "fof/user-directory"
       ]
     },
     "flagrow": {

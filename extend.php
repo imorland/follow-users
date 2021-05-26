@@ -23,6 +23,8 @@ use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\User\Event\Saving;
+use Flarum\User\Filter\UserFilterer;
+use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 
 return [
@@ -63,6 +65,12 @@ return [
 
     (new Extend\Filter(DiscussionFilterer::class))
         ->addFilter(Query\FollowUsersDiscussionFilter::class),
+
+    (new Extend\Filter(UserFilterer::class))
+        ->addFilter(Query\FollowedUsersFilterGambit::class),
+
+    (new Extend\SimpleFlarumSearch(UserSearcher::class))
+        ->addGambit(Query\FollowedUsersFilterGambit::class),
 
     (new Extend\User())
         ->registerPreference('blocksFollow', 'boolval', false),
