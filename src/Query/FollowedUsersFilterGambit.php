@@ -12,7 +12,6 @@
 
 namespace IanM\FollowUsers\Query;
 
-use Carbon\Carbon;
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
 use Flarum\Search\AbstractRegexGambit;
