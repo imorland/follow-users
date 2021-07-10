@@ -43,6 +43,9 @@ ianm-follow-users:
         no_user_attr_provided_err: "Uh oh, something went wrong while opening this modal."
         no_user_attr_provided_err_debug: "No `user` attribute was passed to the SelectFollowUserLevel modal when created. Modal cannot be rendered."
 
+        save_btn: "Save"
+        cancel_btn: "Cancel"
+
   email:
     new_discussion_by_user_subject: "[Follow User] {title}"
     new_follower_subject: "[Follow User] You have a new follower!"
