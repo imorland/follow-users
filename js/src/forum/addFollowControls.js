@@ -4,7 +4,7 @@ import Button from 'flarum/common/components/Button';
 
 export default () => {
     extend(UserControls, 'userControls', function (items, user) {
-        if (app.session.user === user || !app.session.user) {
+        if (!app.session.user || app.session.user === user) {
             return;
         }
 
@@ -23,24 +23,16 @@ export default () => {
         if (user.followed()) {
             items.add(
                 'unfollow',
-                Button.component(
-                    {
-                        icon: 'fas fa-user-slash',
-                        onclick: unfollow.bind(user),
-                    },
-                    app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')
-                )
+                <Button icon="fas fa-user-slash" onclick={unfollow.bind(user)}>
+                    {app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')}
+                </Button>
             );
         } else if (user.canBeFollowed()) {
             items.add(
                 'follow',
-                Button.component(
-                    {
-                        icon: 'fas fa-user-friends',
-                        onclick: follow.bind(user),
-                    },
-                    app.translator.trans('ianm-follow-users.forum.user_controls.follow_button')
-                )
+                <Button icon="fas fa-user-friends" onclick={follow.bind(user)}>
+                    {app.translator.trans('ianm-follow-users.forum.user_controls.follow_button')}
+                </Button>
             );
         }
     });
