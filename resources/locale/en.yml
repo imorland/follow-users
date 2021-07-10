@@ -1,5 +1,4 @@
 ianm-follow-users:
-
   admin:
     permissions:
       be_followed_label: Allow users to follow
@@ -21,7 +20,7 @@ ianm-follow-users:
 
     index:
       follow_tag_button: Follow
-      unfollow_tag_button: Stop Following
+      unfollow_tag_button: Update Follow Levels
 
     notifications:
       new_discussion_text: "{username} started"
@@ -34,6 +33,15 @@ ianm-follow-users:
 
     filter:
       following: Followed users
+
+    modals:
+      select_follow_level:
+        title: "Select follow level for {username}"
+
+        follow_levels_heading: "Follow levels"
+
+        no_user_attr_provided_err: "Uh oh, something went wrong while opening this modal."
+        no_user_attr_provided_err_debug: "No `user` attribute was passed to the SelectFollowUserLevel modal when created. Modal cannot be rendered."
 
   email:
     new_discussion_by_user_subject: "[Follow User] {title}"
@@ -80,3 +88,16 @@ ianm-follow-users:
 
   lib:
     following_link: Followed Users
+
+    follow_levels:
+      discussions:
+        name: Discussions
+
+        description: |
+          Receive notifications when this user starts new discussions.
+
+      posts:
+        name: Posts
+
+        description: |
+          Receive notifications when this user authors new posts within any discussion.

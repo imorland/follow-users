@@ -1,0 +1,40 @@
+.iam_follow_users-selectFollowLevelModal {
+  .selectFollowLevelModal {
+    &-level {
+      display: grid;
+
+      grid-template-columns: minmax(24px, max-content) 1fr;
+      grid-template-areas:
+        "input name"
+        "x     desc";
+      align-items: center;
+
+      input {
+        grid-area: input;
+      }
+
+      label {
+        font-weight: bold;
+        grid-area: name;
+      }
+
+      p {
+        grid-area: desc;
+      }
+    }
+
+    &-actions {
+      margin-top: 16px;
+      margin-left: auto;
+      display: flex;
+
+      :first-child {
+        margin-left: auto;
+      }
+
+      .Button--primary {
+        margin-left: 8px;
+      }
+    }
+  }
+}
