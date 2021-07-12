@@ -31,7 +31,7 @@ class Following
     public $user;
 
     /**
-     * The subscription type ('follow' or 'lurk') 
+     * The subscription type ('follow' or 'lurk').
      *
      * @var string
      */
