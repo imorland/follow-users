@@ -70,10 +70,10 @@ export class SelectFollowUserTypeModal extends Modal {
                 </fieldset>
                 <fieldset class="selectFollowLevelModal-actions">
                     <Button disabled={this.saving} class="Button" onclick={this.hide.bind(this)}>
-                        {this.trans('save_btn')}
+                        {this.trans('cancel_btn')}
                     </Button>
                     <Button disabled={this.saving} class="Button Button--primary" onclick={this.saveFollowLevel.bind(this)}>
-                        {this.trans('cancel_btn')}
+                        {this.trans('save_btn')}
                     </Button>
                 </fieldset>
             </div>
