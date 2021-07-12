@@ -31,12 +31,20 @@ class Following
     public $user;
 
     /**
+     * The subscription type ('follow' or 'lurk') 
+     *
+     * @var string
+     */
+    public $subscription;
+
+    /**
      * @param User $actor The user who is performing the action.
      * @param User $user  The user who is being followed.
      */
-    public function __construct(User $actor, User $user)
+    public function __construct(User $actor, User $user, string $subscription)
     {
         $this->actor = $actor;
         $this->user = $user;
+        $this->subscription = $subscription;
     }
 }

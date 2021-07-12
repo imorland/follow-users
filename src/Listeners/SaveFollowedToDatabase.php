@@ -43,16 +43,16 @@ class SaveFollowedToDatabase
 
             $actor->assertRegistered();
 
-            $followed = (bool) $attributes['followUsers'];
+            $subscription = (bool) $attributes['followUsers'];
 
             $changed = false;
             $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
 
-            if ($followed) {
+            if ($subscription) {
                 if (!$exists) {
                     $actor->assertCan('follow', $user);
-                    $this->events->dispatch(new Following($actor, $user));
-                    $actor->followedUsers()->attach($user, ['subscription' => $followed]);
+                    $this->events->dispatch(new Following($actor, $user, $subscription));
+                    $actor->followedUsers()->attach($user, ['subscription' => $subscription]);
                     $changed = true;
                 }
             } elseif ($exists) {
