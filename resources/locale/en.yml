@@ -37,8 +37,10 @@ ianm-follow-users:
     modals:
       select_follow_level:
         title: "Select follow level for {username}"
+        description: "Choose how you'd like to follow <em>{username}</em>."
 
         follow_levels_heading: "Follow levels"
+        follow_select_label: "Follow type"
 
         no_user_attr_provided_err: "Uh oh, something went wrong while opening this modal."
         no_user_attr_provided_err_debug: "No `user` attribute was passed to the SelectFollowUserLevel modal when created. Modal cannot be rendered."
@@ -93,14 +95,20 @@ ianm-follow-users:
     following_link: Followed Users
 
     follow_levels:
-      discussions:
-        name: Discussions
+      unfollow:
+        name: Don't follow
 
         description: |
-          Receive notifications when this user starts new discussions.
+          Don't receive any notifications for <em>{username}</em>'s activity.
 
-      posts:
-        name: Posts
+      follow:
+        name: Follow all
 
         description: |
-          Receive notifications when this user authors new posts within any discussion.
+          Receive notifications when <em>{username}</em> starts new discussions and authors new posts.
+
+      lurk:
+        name: Lurking
+
+        description: |
+          Receive notifications when <em>{username}</em> authors new posts within any discussion.

@@ -2,77 +2,100 @@ import app from 'flarum/forum/app';
 import Modal from 'flarum/common/components/Modal';
 import User from 'flarum/common/models/User';
 import Button from 'flarum/common/components/Button';
+import Select from 'flarum/common/components/Select';
 import { FollowLevels } from '../../common/FollowLevels';
 
 export class SelectFollowUserTypeModal extends Modal {
-    /**
-     * User being followed
-     *
-     * @type User | null
-     */
-    user = null;
+    state = {
+        /**
+         * User being followed
+         *
+         * @type User | null
+         */
+        user: null,
 
-    /**
-     * Is the modal currently saving?
-     *
-     * @type boolean
-     */
-    saving = false;
+        /**
+         * Is the modal currently saving?
+         *
+         * @type boolean
+         */
+        saving: false,
 
-    /**
-     * Set of following levels active.
-     *
-     * @example new Set(["DISCUSSIONS", "POSTS"])
-     */
-    inputs = new Set();
+        /**
+         * Currently selected follow level.
+         *
+         * @type "lurk" | "follow" | "unfollow"
+         * @example "lurk"
+         */
+        followState: undefined,
+    };
 
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.user = this.attrs.user;
+        this.state.user = this.attrs.user;
 
-        this.inputs = new Set(this.user.attribute('following'));
+        this.state.followState = this.state.user?.attribute?.('following') || 'unfollow';
     }
 
     className = () => 'iam_follow_users-selectFollowLevelModal';
 
     title() {
-        return this.trans('title', { username: <em>{this.user?.username?.()}</em> });
+        return this.trans('title', { username: <em>{this.state.user?.username?.()}</em> });
     }
 
     content() {
-        // If this.user isn't a valid User, exit quickly to prevent complete forum errors.
-        if (!(this.user instanceof User)) {
-            return <p>{this.trans(`no_user_attr_provided_err${app.forum.attribute('debug') ? '_debug' : ''}`)}</p>;
+        // If `this.user` isn't a valid User, exit quickly to prevent complete forum errors.
+        if (!(this.state.user instanceof User)) {
+            // Show a more detailed error if this happens when the forum is in debug mode.
+            return (
+                <div class="Modal-body">
+                    <p>{this.trans(`no_user_attr_provided_err${app.forum.attribute('debug') ? '_debug' : ''}`)}</p>
+                </div>
+            );
         }
+
+        console.log(this.state);
+
+        const user = this.state.user;
+
+        const availableLevelOptions = FollowLevels.reduce((acc, curr) => ({ ...acc, [curr.value]: curr.name() }), {});
+        const selectedLevel = FollowLevels.find((l) => l.value === this.state.followState);
+
+        console.log(user);
 
         return (
             <div class="Modal-body">
                 <fieldset>
-                    <h3>{this.trans('follow_levels_heading')}</h3>
+                    <legend>{this.trans('description', { user })}</legend>
 
-                    {FollowLevels.map((level) => {
-                        return (
-                            <div class="selectFollowLevelModal-level">
-                                <input
-                                    disabled={this.saving}
-                                    type="checkbox"
-                                    value={level.value}
-                                    id={`selectFollowLevelModal-${level.value}-cb`}
-                                    aria-described-by={`selectFollowLevelModal-${level.value}-help`}
-                                    oninput={this.updateInputs.bind(this)}
-                                />
-                                <label for={`selectFollowLevelModal-${level.value}-cb`}>{level.name()}</label>
-                                <p id={`selectFollowLevelModal-${level.value}-help`}>{level.description()}</p>
-                            </div>
-                        );
-                    })}
+                    <div class="selectFollowLevelModal-level">
+                        <label for="selectFollowLevelModal-select">{this.trans('follow_select_label')}</label>
+
+                        <Select
+                            disabled={this.state.saving}
+                            id="selectFollowLevelModal-select"
+                            onchange={this.onFollowLevelChange.bind(this)}
+                            // Dynamic attrs that change based on the input
+                            value={selectedLevel.value}
+                            aria-described-by={`selectFollowLevelModal-${selectedLevel.value}-help`}
+                            options={availableLevelOptions}
+                        />
+
+                        {/* Helper text to describe the selected follow level */}
+                        <p id={`selectFollowLevelModal-${selectedLevel.value}-help`}>{selectedLevel.description({ user })}</p>
+                    </div>
                 </fieldset>
                 <fieldset class="selectFollowLevelModal-actions">
-                    <Button disabled={this.saving} class="Button" onclick={this.hide.bind(this)}>
+                    <Button disabled={this.state.saving} class="Button" onclick={this.hide.bind(this)}>
                         {this.trans('cancel_btn')}
                     </Button>
-                    <Button disabled={this.saving} class="Button Button--primary" onclick={this.saveFollowLevel.bind(this)}>
+                    <Button
+                        disabled={this.state.saving}
+                        class="Button Button--primary"
+                        onclick={this.saveFollowLevel.bind(this)}
+                        loading={this.state.saving}
+                    >
                         {this.trans('save_btn')}
                     </Button>
                 </fieldset>
@@ -80,14 +103,20 @@ export class SelectFollowUserTypeModal extends Modal {
         );
     }
 
-    async saveFollowLevel() {
-        this.saving = true;
+    /**
+     * Handles a change on the <select> element and saves the new value to a class property.
+     */
+    onFollowLevelChange() {
+        /**
+         * @type HTMLInputElement
+         */
+        const selectElement = this.$('.Select-input')[0];
 
-        const x = await this.user.save({ followUsers: Array.from(this.inputs) });
+        this.state.followState = selectElement.value || 'unfollow';
 
-        console.log(x);
+        console.log(selectElement);
 
-        this.hide();
+        console.log(this.followState);
     }
 
     /**
@@ -97,18 +126,28 @@ export class SelectFollowUserTypeModal extends Modal {
         return app.translator.trans(`ianm-follow-users.forum.modals.select_follow_level.${key}`, ...opts);
     }
 
-    updateInputs(e) {
-        /**
-         * @type HTMLInputElement
-         */
-        const cbEl = e.target;
+    onsubmit() {
+        this.saveFollowLevel();
+    }
 
-        if (cbEl.checked) {
-            this.inputs.add(cbEl.value);
-        } else {
-            this.inputs.delete(cbEl.value);
+    /**
+     * Sends the new follow state to the
+     */
+    async saveFollowLevel() {
+        const newFollowState = this.state.followState === 'unfollow' ? null : this.state.followState;
+
+        this.state.saving = true;
+
+        // Exit early if level not changed
+        if (this.state.user.attribute('following') === newFollowState) {
+            this.hide();
+            return;
         }
 
-        console.log(this.inputs);
+        const x = await this.state.user.save({ followUsers: newFollowState });
+
+        console.log(x);
+
+        this.hide();
     }
 }
