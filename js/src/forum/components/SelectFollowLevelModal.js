@@ -83,7 +83,7 @@ export class SelectFollowUserTypeModal extends Modal {
     async saveFollowLevel() {
         this.saving = true;
 
-        const x = await this.user.save({ following: Array.from(this.inputs) });
+        const x = await this.user.save({ followUsers: Array.from(this.inputs) });
 
         console.log(x);
 

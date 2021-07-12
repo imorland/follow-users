@@ -37,13 +37,13 @@ class SaveFollowedToDatabase
     {
         $attributes = Arr::get($event->data, 'attributes', []);
 
-        if (array_key_exists('followed', $attributes)) {
+        if (array_key_exists('followUsers', $attributes)) {
             $user = $event->user;
             $actor = $event->actor;
 
             $actor->assertRegistered();
 
-            $followed = (bool) $attributes['followed'];
+            $followed = (bool) $attributes['followUsers'];
 
             $changed = false;
             $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
@@ -52,7 +52,7 @@ class SaveFollowedToDatabase
                 if (!$exists) {
                     $actor->assertCan('follow', $user);
                     $this->events->dispatch(new Following($actor, $user));
-                    $actor->followedUsers()->attach($user, []);
+                    $actor->followedUsers()->attach($user, ['subscription' => $followed]);
                     $changed = true;
                 }
             } elseif ($exists) {
