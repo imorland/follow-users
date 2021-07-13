@@ -61,11 +61,8 @@ class SaveFollowedToDatabase
                     'updated_at'   => Carbon::now(),
                 ]);
 
-                if (!$exists) {
-                    $this->events->dispatch(new Following($actor, $user, $subscription));
-                    $actor->followedUsers()->attach($user);
-                    $changed = true;
-                }
+                $this->events->dispatch(new Following($actor, $user, $subscription));
+                $changed = true;
             } elseif ($exists) {
                 $this->events->dispatch(new Unfollowing($actor, $user));
                 $actor->followedUsers()->detach($user);
