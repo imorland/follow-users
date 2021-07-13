@@ -54,15 +54,14 @@ class SaveFollowedToDatabase
                 $actor->assertCan('follow', $user);
 
                 $state = FollowState::updateOrCreate([
-                    'user_id' => $actor->id,
-                    'followed_user_id' => $user->id
+                    'user_id'          => $actor->id,
+                    'followed_user_id' => $user->id,
                 ], [
                     'subscription' => $subscription,
-                    'updated_at' => Carbon::now()
+                    'updated_at'   => Carbon::now(),
                 ]);
-                
+
                 if (!$exists) {
-                    
                     $this->events->dispatch(new Following($actor, $user, $subscription));
                     $actor->followedUsers()->attach($user);
                     $changed = true;
