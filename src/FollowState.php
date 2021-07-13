@@ -1,0 +1,57 @@
+<?php
+
+namespace IanM\FollowUsers;
+
+use Flarum\Database\AbstractModel;
+use Flarum\User\User;
+
+class FollowState extends AbstractModel
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected $table = 'user_followers';
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $fillable = ['subscription'];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $primaryKey = ['user_id', 'followed_user_id'];
+
+    /**
+     * {@inheritDoc}
+     */
+    public $incrementing = false;
+
+    /**
+     * Get the follow user subscription state for the given User.
+     *
+     * @param User $actor
+     * @param User $user
+     * @return bool|string
+     */
+    public static function for (User $actor, User $user): bool|string
+    {
+        $sub = self::where('user_id', $actor->id)->where('followed_user_id', $user->id)->first();
+
+        return $sub ? $sub->subscription : false;
+    }
+
+    /**
+     * Set the keys for a save update query.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function setKeysForSaveQuery($query)
+    {
+        $query->where('user_id', $this->user_id)
+              ->where('followed_user_id', $this->followed_user_id);
+
+        return $query;
+    }
+}
