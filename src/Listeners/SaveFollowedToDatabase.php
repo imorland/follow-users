@@ -62,7 +62,7 @@ class SaveFollowedToDatabase
                 ]);
 
                 $this->events->dispatch(new Following($actor, $user, $subscription));
-                $changed = true;
+                $changed = $state->wasChanged();
             } elseif ($exists) {
                 $this->events->dispatch(new Unfollowing($actor, $user));
                 $actor->followedUsers()->detach($user);
