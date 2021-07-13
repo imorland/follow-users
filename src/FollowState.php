@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers;
 
 use Flarum\Database\AbstractModel;
@@ -32,9 +42,10 @@ class FollowState extends AbstractModel
      *
      * @param User $actor
      * @param User $user
+     *
      * @return null|string
      */
-    public static function for (User $actor, User $user): ?string
+    public static function for(User $actor, User $user): ?string
     {
         $sub = self::where('user_id', $actor->id)->where('followed_user_id', $user->id)->first();
 
@@ -45,6 +56,7 @@ class FollowState extends AbstractModel
      * Set the keys for a save update query.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     protected function setKeysForSaveQuery($query)
