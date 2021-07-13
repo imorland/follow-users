@@ -32,13 +32,13 @@ class FollowState extends AbstractModel
      *
      * @param User $actor
      * @param User $user
-     * @return bool|string
+     * @return null|string
      */
-    public static function for (User $actor, User $user): bool|string
+    public static function for (User $actor, User $user): ?string
     {
         $sub = self::where('user_id', $actor->id)->where('followed_user_id', $user->id)->first();
 
-        return $sub ? $sub->subscription : false;
+        return $sub ? $sub->subscription : null;
     }
 
     /**
