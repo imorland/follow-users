@@ -102,13 +102,13 @@ ianm-follow-users:
           Don't receive any notifications for <em>{username}</em>'s activity.
 
       follow:
+        name: Follow discussions
+
+        description: |
+          Receive notifications when <em>{username}</em> starts new a new discussion.
+
+      lurk:
         name: Follow all
 
         description: |
-          Receive notifications when <em>{username}</em> starts new discussions and authors new posts.
-
-      lurk:
-        name: Lurking
-
-        description: |
-          Receive notifications when <em>{username}</em> authors new posts within any discussion.
+          Receive notifications when <em>{username}</em> starts a new discussion or posts within any discussion.
