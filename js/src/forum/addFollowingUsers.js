@@ -54,7 +54,7 @@ export default function () {
                 65
             );
 
-            items.add('seperator', Separator.component(), 50);
+            items.add('separator', <Separator />, 50);
         });
     }
 }
