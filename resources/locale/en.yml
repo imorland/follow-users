@@ -27,7 +27,9 @@ ianm-follow-users:
       new_unfollower_text: "{username} stopped following you"
 
     badge:
-      label: Followed user
+      label:
+        follow: Following discussions
+        lurk: Following all
 
     filter:
       following: Followed users

@@ -5,27 +5,27 @@ import Badge from 'flarum/common/components/Badge';
 
 export default function addSubscriptionBadge() {
     extend(Discussion.prototype, 'badges', function (badges) {
-        if (this.user?.()?.followed?.()) {
+        if (this.user()?.followed?.()) {
             badges.add(
                 'user-following',
-                Badge.component({
-                    label: app.translator.trans('ianm-follow-users.forum.badge.label'),
-                    icon: 'fas fa-user-friends',
-                    type: 'friend',
-                })
+                <Badge
+                    label={app.translator.trans(`ianm-follow-users.forum.badge.label.${this.followed()}`)}
+                    icon="fas fa-user-friends"
+                    type="friend"
+                />
             );
         }
     });
 
     extend(User.prototype, 'badges', function (badges) {
-        if (this?.followed?.()) {
+        if (this.followed()) {
             badges.add(
                 'user-following',
-                Badge.component({
-                    label: app.translator.trans('ianm-follow-users.forum.badge.label'),
-                    icon: 'fas fa-user-friends',
-                    type: 'friend',
-                })
+                <Badge
+                    label={app.translator.trans(`ianm-follow-users.forum.badge.label.${this.followed()}`)}
+                    icon="fas fa-user-friends"
+                    type="friend"
+                />
             );
         }
     });
