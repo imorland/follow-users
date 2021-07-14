@@ -19,10 +19,6 @@ export default () => {
         function openFollowLevelModal(user) {
             if (!(user instanceof User)) return;
 
-            // if (confirm(app.translator.trans(`ianm-follow-users.forum.user_controls.unfollow_confirmation`))) {
-            //     user.save({ followed: false });
-            // }
-
             app.modal.show(SelectFollowUserTypeModal, { user });
         }
 
