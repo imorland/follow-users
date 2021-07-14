@@ -25,5 +25,5 @@ return [
         $schema->table('user_followers', function (Blueprint $table) {
             $table->primary(['user_id', 'followed_user_id']);
         });
-    }
+    },
 ];

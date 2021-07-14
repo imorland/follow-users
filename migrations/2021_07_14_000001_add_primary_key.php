@@ -25,5 +25,5 @@ return [
             $table->dropPrimary();
             $table->unsignedInteger('id')->change(); // for removing auto increment
         });
-    }
+    },
 ];
