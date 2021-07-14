@@ -55,7 +55,7 @@ return [
         ->type(Notifications\NewFollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
         ->type(Notifications\NewUnfollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewPostByUserBlueprint::class, DiscussionSerializer::class, []),
+        ->type(Notifications\NewPostByUserBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
 
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveFollowedToDatabase::class)
