@@ -26,20 +26,11 @@ export default () => {
             app.modal.show(SelectFollowUserTypeModal, { user });
         }
 
-        if (user.followed()) {
-            items.add(
-                'unfollow',
-                <Button icon="fas fa-user-slash" onclick={openFollowLevelModal.bind(this, user)}>
-                    {app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')}
-                </Button>
-            );
-        } else if (user.canBeFollowed()) {
-            items.add(
-                'follow',
-                <Button icon="fas fa-user-friends" onclick={openFollowLevelModal.bind(this, user)}>
-                    {app.translator.trans('ianm-follow-users.forum.user_controls.follow_button')}
-                </Button>
-            );
-        }
+        items.add(
+            'follow',
+            <Button icon="fas fa-user-friends" onclick={openFollowLevelModal.bind(this, user)}>
+                {app.translator.trans('ianm-follow-users.forum.user_controls.follow_button')}
+            </Button>
+        );
     });
 };

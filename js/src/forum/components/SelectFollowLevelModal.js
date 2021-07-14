@@ -35,7 +35,7 @@ export class SelectFollowUserTypeModal extends Modal {
 
         this.state.user = this.attrs.user;
 
-        this.state.followState = this.state.user?.attribute?.('following') || 'unfollow';
+        this.state.followState = this.state.user.followed();
     }
 
     className = () => 'iam_follow_users-selectFollowLevelModal';
@@ -55,14 +55,10 @@ export class SelectFollowUserTypeModal extends Modal {
             );
         }
 
-        console.log(this.state);
-
         const user = this.state.user;
 
         const availableLevelOptions = FollowLevels.reduce((acc, curr) => ({ ...acc, [curr.value]: curr.name() }), {});
         const selectedLevel = FollowLevels.find((l) => l.value === this.state.followState);
-
-        console.log(user);
 
         return (
             <div class="Modal-body">
@@ -113,10 +109,6 @@ export class SelectFollowUserTypeModal extends Modal {
         const selectElement = this.$('.Select-input')[0];
 
         this.state.followState = selectElement.value || 'unfollow';
-
-        console.log(selectElement);
-
-        console.log(this.followState);
     }
 
     /**
@@ -145,8 +137,6 @@ export class SelectFollowUserTypeModal extends Modal {
         }
 
         const x = await this.state.user.save({ followUsers: newFollowState });
-
-        console.log(x);
 
         this.hide();
     }
