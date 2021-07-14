@@ -59,7 +59,7 @@ class QueueNotificationJobs
     public function whenPostCreated(PostSaving $event)
     {
         $event->post->afterSave(function (Post $post) {
-            if (!$post->exists || !$post->discussion->exists || $post->number == 1) {
+            if (!$post->exists || !$post->discussion->exists || $post->number == 1 || !$post->wasRecentlyCreated) {
                 return;
             }
 
