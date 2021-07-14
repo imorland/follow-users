@@ -1,6 +1,8 @@
 # Follow Users
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/ianm/follow-users.svg)](https://packagist.org/packages/ianm/follow-users) [![Total Downloads](https://img.shields.io/packagist/dt/ianm/follow-users.svg)](https://packagist.org/packages/ianm/follow-users)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/ianm/follow-users.svg)](https://packagist.org/packages/ianm/follow-users)
+
+![Extiverse](https://extiverse.com/extension/ianm/follow-users/open-graph-image)
 
 A [Flarum](http://flarum.org) extension. Follow users and be notified of new discussions
 
