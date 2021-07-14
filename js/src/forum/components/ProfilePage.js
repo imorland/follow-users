@@ -1,51 +1,66 @@
-import avatar from 'flarum/helpers/avatar';
-import Button from 'flarum/components/Button';
-import username from 'flarum/helpers/username';
-import UserPage from 'flarum/components/UserPage';
-import Stream from 'flarum/utils/Stream';
+import app from 'flarum/forum/app';
+import Button from 'flarum/common/components/Button';
+import Link from 'flarum/common/components/Link';
+import avatar from 'flarum/common/helpers/avatar';
+import username from 'flarum/common/helpers/username';
+import UserPage from 'flarum/forum/components/UserPage';
+import { SelectFollowUserTypeModal } from './SelectFollowLevelModal';
 
 export default class ProfilePage extends UserPage {
     oninit(vnode) {
         super.oninit(vnode);
 
+        this.refresh();
+    }
+
+    refresh() {
         this.loading = true;
-
         this.followedUsers = app.session.user.followedUsers();
-
         this.loadUser(app.session.user.username());
     }
 
+    changeUserFollowOptions(user) {
+        app.modal.show(SelectFollowUserTypeModal, { user });
+    }
+
     content() {
+        if (this.followedUsers.length === 0) {
+            return (
+                <div class="Placeholder">
+                    <p>{app.translator.trans('ianm-follow-users.forum.profile_page.no_following')}</p>
+                </div>
+            );
+        }
+
         return (
             <table className="NotificationGrid followPage-grid">
                 {this.followedUsers.map((user, i) => {
-                    var unfollow = () => {
-                        if (confirm(app.translator.trans(`ianm-follow-users.forum.user_controls.unfollow_confirmation`))) {
-                            user.save({ followed: false });
-                            this.followedUsers.splice(i, 1);
-                            app.session.user.followedUsers = Stream(this.followedUsers);
-                        }
-                    };
-
                     return (
-                        <tr>
+                        <tr class="followPage-user">
                             <td>
-                                <a href={app.route.user(user)} config={m.route}>
+                                <Link href={app.route.user(user)}>
                                     <h3>
-                                        {avatar(user, { className: 'followPage-avatar' })} {username(user)}
+                                        {avatar(user, { className: 'followPage-avatar' })}
+                                        <div class="followPage-userInfo">
+                                            {username(user)}
+
+                                            <span class="followPage-type">
+                                                {app.translator.trans(`ianm-follow-users.forum.badge.label.${user.followed()}`)}
+                                            </span>
+                                        </div>
                                     </h3>
-                                </a>
+                                </Link>
                             </td>
+
                             <td className="followPage-button">
-                                {Button.component(
-                                    {
-                                        icon: 'fas fa-comment-slash',
-                                        type: 'button',
-                                        className: 'Button Button--warning',
-                                        onclick: unfollow.bind(user),
-                                    },
-                                    app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')
-                                )}
+                                <Button
+                                    icon="fas fa-user-friends"
+                                    type="button"
+                                    className="Button Button--warning"
+                                    onclick={() => this.changeUserFollowOptions(user)}
+                                >
+                                    {app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')}
+                                </Button>
                             </td>
                         </tr>
                     );
@@ -54,7 +69,7 @@ export default class ProfilePage extends UserPage {
         );
     }
 
-    show(user) {
+    show() {
         this.user = app.session.user;
 
         m.redraw();
