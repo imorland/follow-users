@@ -35,7 +35,7 @@ export class SelectFollowUserTypeModal extends Modal {
 
         this.state.user = this.attrs.user;
 
-        this.state.followState = this.state.user.followed();
+        this.state.followState = this.state.user.followed() || 'unfollow';
     }
 
     className = () => 'iam_follow_users-selectFollowLevelModal';
