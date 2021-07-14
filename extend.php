@@ -41,10 +41,11 @@ return [
     (new Extend\Model(User::class))
         ->relationship('followedUsers', function (AbstractModel $model) {
             return $model->belongsToMany(User::class, 'user_followers', 'user_id', 'followed_user_id')
-                ->withTimestamps();
+                ->withPivot('subscription');
         })
         ->relationship('followedBy', function (AbstractModel $model) {
-            return $model->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id');
+            return $model->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id')
+                ->withPivot('subscription');
         }),
 
     (new Extend\View())
@@ -54,7 +55,7 @@ return [
         ->type(Notifications\NewFollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
         ->type(Notifications\NewUnfollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewPostByUserBlueprint::class, DiscussionSerializer::class, []),
+        ->type(Notifications\NewPostByUserBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
 
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveFollowedToDatabase::class)
@@ -83,8 +84,9 @@ return [
 
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(function (UserSerializer $serializer, User $user, array $attributes): array {
-            $attributes['followed'] = $serializer->getActor()->followedUsers->contains($user);
-            $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
+            $actor = $serializer->getActor();
+            $attributes['followed'] = FollowState::for($actor, $user);
+            $attributes['canBeFollowed'] = $actor->can('follow', $user);
 
             return $attributes;
         }),

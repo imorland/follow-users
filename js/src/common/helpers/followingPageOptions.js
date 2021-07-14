@@ -2,8 +2,8 @@ import * as follow_tags from '@fof-follow-tags';
 
 // We need to add options to the list of options available on the following page
 // As `follow_tags.utils.followingPageOptions` is a function, we cannot really
-// extend or override it with the flarum helpers.
-// As the reuslt of this function is cached after its first execution,
+// extend or override it with the Flarum helpers.
+// As the result of this function is cached after its first execution,
 // we can use the below version and execute this one to cache the desired options.
 
 // Save the reference to the original function, as it will be overriden

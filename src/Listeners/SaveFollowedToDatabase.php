@@ -12,9 +12,11 @@
 
 namespace IanM\FollowUsers\Listeners;
 
+use Carbon\Carbon;
 use Flarum\User\Event\Saving;
 use IanM\FollowUsers\Events\Following;
 use IanM\FollowUsers\Events\Unfollowing;
+use IanM\FollowUsers\FollowState;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
@@ -37,24 +39,30 @@ class SaveFollowedToDatabase
     {
         $attributes = Arr::get($event->data, 'attributes', []);
 
-        if (array_key_exists('followed', $attributes)) {
+        if (array_key_exists('followUsers', $attributes)) {
             $user = $event->user;
             $actor = $event->actor;
 
             $actor->assertRegistered();
 
-            $followed = (bool) $attributes['followed'];
+            $subscription = $attributes['followUsers'];
 
             $changed = false;
             $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
 
-            if ($followed) {
-                if (!$exists) {
-                    $actor->assertCan('follow', $user);
-                    $this->events->dispatch(new Following($actor, $user));
-                    $actor->followedUsers()->attach($user, []);
-                    $changed = true;
-                }
+            if (!empty($subscription)) {
+                $actor->assertCan('follow', $user);
+
+                $state = FollowState::updateOrCreate([
+                    'user_id'          => $actor->id,
+                    'followed_user_id' => $user->id,
+                ], [
+                    'subscription' => $subscription,
+                    'updated_at'   => Carbon::now(),
+                ]);
+
+                $this->events->dispatch(new Following($actor, $user, $subscription));
+                $changed = $state->wasChanged();
             } elseif ($exists) {
                 $this->events->dispatch(new Unfollowing($actor, $user));
                 $actor->followedUsers()->detach($user);

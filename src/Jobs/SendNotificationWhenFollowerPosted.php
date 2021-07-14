@@ -14,6 +14,7 @@ namespace IanM\FollowUsers\Jobs;
 
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Post;
+use IanM\FollowUsers\FollowState;
 use IanM\FollowUsers\Notifications\NewPostByUserBlueprint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,13 +50,14 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
          */
         $discussion = $this->post->discussion;
 
+        $actor = $this->post->user;
         /**
          * @var Collection
          */
         $notify = $this->post->user->followedBy
-            ->reject(function ($user) use ($discussion) {
+            ->reject(function ($user) use ($discussion, $actor) {
                 return !$discussion->newQuery()->whereVisibleTo($user)->find($discussion->id)
-                    || !$this->post->isVisibleTo($user);
+                    || !$this->post->isVisibleTo($user) || FollowState::for($user, $actor) !== 'lurk';
             });
 
         $notifications->sync(
