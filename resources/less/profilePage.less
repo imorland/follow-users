@@ -1,8 +1,16 @@
 .followPage {
   &-user {
-    a h3 {
-      display: flex;
-      align-items: center;
+    a {
+      text-decoration: none !important;
+
+      &:hover .username {
+        text-decoration: underline;
+      }
+
+      h3 {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 
