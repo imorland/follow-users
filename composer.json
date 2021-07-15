@@ -1,6 +1,6 @@
 {
   "name": "ianm/follow-users",
-  "description": "Follow users and be notified of new discussions",
+  "description": "Follow users and be notified of new discussions or posts",
   "keywords": [
     "flarum", "subscribe", "following", "friends"
   ],
