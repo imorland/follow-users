@@ -9,7 +9,7 @@ export default function addSubscriptionBadge() {
             badges.add(
                 'user-following',
                 <Badge
-                    label={app.translator.trans(`ianm-follow-users.forum.badge.label.${this.user.followed()}`)}
+                    label={app.translator.trans(`ianm-follow-users.forum.badge.label.${this.user().followed()}`)}
                     icon="fas fa-user-friends"
                     type="friend"
                 />
