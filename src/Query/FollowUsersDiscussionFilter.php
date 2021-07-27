@@ -46,7 +46,7 @@ class FollowUsersDiscussionFilter implements FilterInterface
         $query->$method('id', function (Builder $query) use ($followed) {
             $query->select('id')
                 ->from('discussions')
-                ->whereIn('user_id', $followed->pluck('id')->toArray());
+                ->whereIn('user_id', $followed->pluck('users.id')->toArray());
         });
     }
 }

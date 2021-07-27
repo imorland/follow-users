@@ -70,9 +70,9 @@ class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInt
     {
         $query->where(function ($query) use ($actor, $negate) {
             if ($negate) {
-                $query->whereNotIn('id', $actor->followedUsers()->pluck('id'));
+                $query->whereNotIn('id', $actor->followedUsers()->pluck('users.id'));
             } else {
-                $query->whereIn('id', $actor->followedUsers()->pluck('id'));
+                $query->whereIn('id', $actor->followedUsers()->pluck('users.id'));
             }
         });
     }
