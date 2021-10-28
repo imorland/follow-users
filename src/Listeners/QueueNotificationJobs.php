@@ -30,7 +30,7 @@ class QueueNotificationJobs
         $events->listen(Unfollowing::class, [$this, 'whenUnfollowed']);
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
         $events->listen(PostSaving::class, [$this, 'whenPostCreated']);
-        //$events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
+        $events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
     }
 
     public function whenFollowed(Following $event)
@@ -69,16 +69,16 @@ class QueueNotificationJobs
         });
     }
 
-    // public function whenPostApproved(PostWasApproved $event)
-    // {
-    //     if (!$event->post->discussion->exists) {
-    //         return;
-    //     }
+    public function whenPostApproved(PostWasApproved $event)
+    {
+        if (!$event->post->discussion->exists) {
+            return;
+        }
 
-    //     resolve('flarum.queue.connection')->push(
-    //         $event->post->number == 1
-    //             ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
-    //             : new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
-    //     );
-    // }
+        resolve('flarum.queue.connection')->push(
+            $event->post->number == 1
+                ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
+                : new Jobs\SendNotificationWhenFollowerPosted($event->post, $event->post->number - 1)
+        );
+    }
 }
