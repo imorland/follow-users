@@ -11,11 +11,11 @@ const original = follow_tags.utils.followingPageOptions;
 
 // Customized version of the helper with addition options for followed users
 export default (section) => {
-    // Get the original options
-    const options = original(section);
+  // Get the original options
+  const options = original(section);
 
-    options.users = app.translator.trans('ianm-follow-users.lib.following_link');
+  options.users = app.translator.trans('ianm-follow-users.lib.following_link');
 
-    // Return the mutated options list
-    return options;
+  // Return the mutated options list
+  return options;
 };

@@ -6,55 +6,55 @@ import followingPageOptions from '../common/helpers/followingPageOptions';
 import Separator from 'flarum/common/components/Separator';
 
 export default function () {
-    if (app.initializers.has('fof/follow-tags')) {
-        // Replace the original function with our customized version
-        follow_tags.utils.followingPageOptions = followingPageOptions;
-        // Execute the customized helper to cache the returned list of options
-        follow_tags.utils.followingPageOptions('forum.index.following');
+  if (app.initializers.has('fof/follow-tags')) {
+    // Replace the original function with our customized version
+    follow_tags.utils.followingPageOptions = followingPageOptions;
+    // Execute the customized helper to cache the returned list of options
+    follow_tags.utils.followingPageOptions('forum.index.following');
 
-        extend(DiscussionListState.prototype, 'requestParams', function (params) {
-            if (!follow_tags.utils.isFollowingPage() || !app.session.user) return;
+    extend(DiscussionListState.prototype, 'requestParams', function (params) {
+      if (!follow_tags.utils.isFollowingPage() || !app.session.user) return;
 
-            if (!this.followTags) {
-                this.followTags = follow_tags.utils.getDefaultFollowingFiltering();
-            }
+      if (!this.followTags) {
+        this.followTags = follow_tags.utils.getDefaultFollowingFiltering();
+      }
 
-            const followTags = this.followTags;
+      const followTags = this.followTags;
 
-            if (app.current.get('routeName') === 'following' && followTags === 'users') {
-                params.filter['following-users'] = true;
+      if (app.current.get('routeName') === 'following' && followTags === 'users') {
+        params.filter['following-users'] = true;
 
-                delete params.filter.subscription;
-            }
-        });
-    }
+        delete params.filter.subscription;
+      }
+    });
+  }
 
-    if (app.initializers.has('fof-user-directory')) {
-        extend(user_directory.UserDirectoryPage.prototype, 'groupItems', function (items) {
-            items.add(
-                'follow-users',
-                user_directory.CheckableButton.component(
-                    {
-                        className: 'GroupFilterButton',
-                        icon: 'fas fa-user-friends',
-                        checked: this.enabledSpecialGroupFilters['ianm-follow-users'] === 'is:followeduser',
-                        onclick: () => {
-                            const id = 'ianm-follow-users';
-                            if (this.enabledSpecialGroupFilters[id] === 'is:followeduser') {
-                                this.enabledSpecialGroupFilters[id] = '';
-                            } else {
-                                this.enabledSpecialGroupFilters[id] = 'is:followeduser';
-                            }
+  if (app.initializers.has('fof-user-directory')) {
+    extend(user_directory.UserDirectoryPage.prototype, 'groupItems', function (items) {
+      items.add(
+        'follow-users',
+        user_directory.CheckableButton.component(
+          {
+            className: 'GroupFilterButton',
+            icon: 'fas fa-user-friends',
+            checked: this.enabledSpecialGroupFilters['ianm-follow-users'] === 'is:followeduser',
+            onclick: () => {
+              const id = 'ianm-follow-users';
+              if (this.enabledSpecialGroupFilters[id] === 'is:followeduser') {
+                this.enabledSpecialGroupFilters[id] = '';
+              } else {
+                this.enabledSpecialGroupFilters[id] = 'is:followeduser';
+              }
 
-                            this.changeParams(this.params().sort);
-                        },
-                    },
-                    app.translator.trans('ianm-follow-users.forum.filter.following')
-                ),
-                65
-            );
+              this.changeParams(this.params().sort);
+            },
+          },
+          app.translator.trans('ianm-follow-users.forum.filter.following')
+        ),
+        65
+      );
 
-            items.add('separator', <Separator />, 50);
-        });
-    }
+      items.add('separator', <Separator />, 50);
+    });
+  }
 }
