@@ -25,7 +25,7 @@ class FollowState extends AbstractModel
     /**
      * {@inheritDoc}
      */
-    protected $fillable = ['user_id', 'followed_user_id', 'subscription'];
+    protected $fillable = ['user_id', 'followed_user_id', 'subscription', 'updated_at'];
 
     /**
      * Get the follow user subscription state for the given User.
