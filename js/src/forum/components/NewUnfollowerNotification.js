@@ -17,4 +17,8 @@ export default class NewUnfollowerNotification extends Notification {
       user: this.attrs.notification.fromUser(),
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }
