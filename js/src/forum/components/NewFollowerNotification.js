@@ -17,4 +17,8 @@ export default class NewFollowerNotification extends Notification {
       user: this.attrs.notification.fromUser(),
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }
