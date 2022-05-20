@@ -13,7 +13,7 @@
   },
   "require": {
     "php": "^7.4 || ^8.0",
-    "flarum/core": "^1.0.0",
+    "flarum/core": "^1.2.0",
     "fof/follow-tags": "^1.0.0"
   },
   "authors": [

@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import UserControls from 'flarum/common/utils/UserControls';
+import UserControls from 'flarum/forum/utils/UserControls';
 import Button from 'flarum/common/components/Button';
 import { SelectFollowUserTypeModal } from './components/SelectFollowLevelModal';
 import User from 'flarum/common/models/User';

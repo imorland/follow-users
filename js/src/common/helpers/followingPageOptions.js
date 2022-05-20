@@ -1,3 +1,4 @@
+import app from 'flarum/common/app';
 import * as follow_tags from '@fof-follow-tags';
 
 // We need to add options to the list of options available on the following page

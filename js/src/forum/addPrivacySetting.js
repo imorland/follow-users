@@ -1,5 +1,6 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import SettingsPage from 'flarum/common/components/SettingsPage';
+import SettingsPage from 'flarum/forum/components/SettingsPage';
 import Switch from 'flarum/common/components/Switch';
 
 export default function () {
