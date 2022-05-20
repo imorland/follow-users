@@ -1,7 +1,7 @@
 import { extend } from 'flarum/common/extend';
 import * as follow_tags from '@fof-follow-tags';
 import * as user_directory from '@fof-user-directory';
-import DiscussionListState from 'flarum/common/states/DiscussionListState';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import followingPageOptions from '../common/helpers/followingPageOptions';
 import Separator from 'flarum/common/components/Separator';
 

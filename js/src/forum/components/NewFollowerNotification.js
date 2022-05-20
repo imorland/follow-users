@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Notification from 'flarum/common/components/Notification';
 
 export default class NewFollowerNotification extends Notification {

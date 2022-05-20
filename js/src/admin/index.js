@@ -1,4 +1,4 @@
-import app from 'flarum/common/app';
+import app from 'flarum/admin/app';
 import * as follow_tags from '@fof-follow-tags';
 import followingPageOptions from '../common/helpers/followingPageOptions';
 
