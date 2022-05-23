@@ -111,5 +111,5 @@ return [
 
     (new Extend\Settings())
         ->serializeToForum('ianm-follow-users.button-on-profile', 'ianm-follow-users.button-on-profile', 'boolVal')
-        ->default('ianm-follow-users.button-on-profile', false)
+        ->default('ianm-follow-users.button-on-profile', false),
 ];
