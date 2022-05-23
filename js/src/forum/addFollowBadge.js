@@ -4,7 +4,7 @@ import Discussion from 'flarum/common/models/Discussion';
 import User from 'flarum/common/models/User';
 import Badge from 'flarum/common/components/Badge';
 
-export default function addSubscriptionBadge() {
+export default function addFollowBadge() {
   extend(Discussion.prototype, 'badges', function (badges) {
     if (this.user()?.followed?.()) {
       badges.add(
