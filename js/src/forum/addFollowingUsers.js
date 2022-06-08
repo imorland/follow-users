@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import * as follow_tags from '@fof-follow-tags';
 import * as user_directory from '@fof-user-directory';
