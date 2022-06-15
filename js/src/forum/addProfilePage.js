@@ -5,12 +5,16 @@ import UserPage from 'flarum/forum/components/UserPage';
 
 export default function () {
   extend(UserPage.prototype, 'navItems', function (items) {
-    if (app.session.user && app.session.user === this.user)
+    if (app.session.user && app.session.user === this.user) {
+      const followedUsersCount = this.user.followedUsers?.().length;
+
       items.add(
         'followed-users',
         <LinkButton href={app.route('followedUsers')} icon="fas fa-user-friends">
           {app.translator.trans('ianm-follow-users.forum.profile_link')}
+          <span className="Button-badge">{followedUsersCount}</span>
         </LinkButton>
       );
+    }
   });
 }
