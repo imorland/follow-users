@@ -33,11 +33,10 @@ export default function addFollowControls() {
   });
 
   extend(UserCard.prototype, 'view', function (view) {
-    if (!app.forum.attribute('ianm-follow-users.button-on-profile')) {
+    const user = this.attrs.user;
+    if (!app.forum.attribute('ianm-follow-users.button-on-profile') || !app.session.user || app.session.user === user || !user.canBeFollowed()) {
       return;
     }
-
-    const user = this.attrs.user;
 
     /**
      * Opens the SelectFollowLevelModal with the provided user.
