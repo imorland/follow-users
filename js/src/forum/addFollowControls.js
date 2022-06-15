@@ -9,7 +9,7 @@ import { findFirstVdomChild } from './util/findVdomChild';
 
 export default function addFollowControls() {
   extend(UserControls, 'userControls', function (items, user) {
-    if (!app.session.user || app.session.user === user || !user.canBeFollowed()) {
+    if (!app.session.user || app.session.user === user || !user.canBeFollowed() || app.forum.attribute('ianm-follow-users.button-on-profile')) {
       return;
     }
 
