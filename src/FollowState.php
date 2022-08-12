@@ -47,7 +47,7 @@ class FollowState extends AbstractModel
      *
      * @param User $user
      *
-     * @return integer
+     * @return int
      */
     public static function getFollowingCount(User $user): int
     {
@@ -58,7 +58,8 @@ class FollowState extends AbstractModel
      * Get the number of users following the given user.
      *
      * @param User $user
-     * @return integer
+     *
+     * @return int
      */
     public static function getFollowerCount(User $user): int
     {

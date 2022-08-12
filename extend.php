@@ -86,7 +86,7 @@ return [
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(function (UserSerializer $serializer, User $user, array $attributes): array {
             $actor = $serializer->getActor();
-            
+
             $attributes['followed'] = FollowState::for($actor, $user);
             $attributes['canBeFollowed'] = $actor->can('follow', $user);
 
