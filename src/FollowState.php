@@ -41,4 +41,27 @@ class FollowState extends AbstractModel
 
         return $sub ? $sub->subscription : null;
     }
+
+    /**
+     * Get the number of users the given user is following.
+     *
+     * @param User $user
+     *
+     * @return integer
+     */
+    public static function getFollowingCount(User $user): int
+    {
+        return self::where('user_id', $user->id)->count();
+    }
+
+    /**
+     * Get the number of users following the given user.
+     *
+     * @param User $user
+     * @return integer
+     */
+    public static function getFollowerCount(User $user): int
+    {
+        return self::where('followed_user_id', $user->id)->count();
+    }
 }

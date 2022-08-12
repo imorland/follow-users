@@ -6,7 +6,7 @@ import UserPage from 'flarum/forum/components/UserPage';
 export default function () {
   extend(UserPage.prototype, 'navItems', function (items) {
     if (app.session.user && app.session.user === this.user) {
-      const followedUsersCount = this.user.followedUsers?.().length;
+      const followedUsersCount = this.user.followingCount();
 
       items.add(
         'followed-users',

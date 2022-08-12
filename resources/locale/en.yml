@@ -6,6 +6,8 @@ ianm-follow-users:
       button-on-profile-label: Show the Follow button directly on the user profile header
 
   forum:
+    followed: Followed
+    followers: Followers
     profile_link: => ianm-follow-users.lib.following_link
 
     profile_page:

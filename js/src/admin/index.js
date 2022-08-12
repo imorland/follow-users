@@ -18,6 +18,11 @@ app.initializers.add('ianm-follow-users', () => {
       label: app.translator.trans('ianm-follow-users.admin.settings.button-on-profile-label'),
       type: 'bool',
       setting: 'ianm-follow-users.button-on-profile',
+    })
+    .registerSetting({
+      label: app.translator.trans('ianm-follow-users.admin.settings.stats-on-profile-label'),
+      type: 'bool',
+      setting: 'ianm-follow-users.stats-on-profile',
     });
 
   if (app.initializers.has('fof/follow-tags')) {

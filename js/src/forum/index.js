@@ -14,14 +14,18 @@ import NewUnfollowerNotification from './components/NewUnfollowerNotification';
 import addFollowBadge from './addFollowBadge';
 import addPrivacySetting from './addPrivacySetting';
 import addFollowingUsers from './addFollowingUsers';
+import addUserCardStats from './addUserCardStats';
 
 app.initializers.add(
   'ianm-follow-users',
   () => {
     User.prototype.followed = Model.attribute('followed');
     User.prototype.followedUsers = Model.hasMany('followedUsers');
+    User.prototype.followedBy = Model.hasMany('followedBy');
     User.prototype.blocksFollow = Model.attribute('blocksFollow');
     User.prototype.canBeFollowed = Model.attribute('canBeFollowed');
+    User.prototype.followingCount = Model.attribute('followingCount');
+    User.prototype.followerCount = Model.attribute('followerCount');
 
     app.routes.followedUsers = { path: '/followedUsers', component: ProfilePage };
 
@@ -30,6 +34,7 @@ app.initializers.add(
     addFollowBadge();
     addPrivacySetting();
     addFollowingUsers();
+    addUserCardStats();
 
     app.notificationComponents.newFollower = NewFollowerNotification;
     app.notificationComponents.newUnfollower = NewUnfollowerNotification;

@@ -22,6 +22,7 @@ use Flarum\Database\AbstractModel;
 use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
+use Flarum\Http\RequestUtil;
 use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
@@ -85,15 +86,19 @@ return [
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(function (UserSerializer $serializer, User $user, array $attributes): array {
             $actor = $serializer->getActor();
+            
             $attributes['followed'] = FollowState::for($actor, $user);
             $attributes['canBeFollowed'] = $actor->can('follow', $user);
+
+            $attributes['followingCount'] = FollowState::getFollowingCount($user);
+            $attributes['followerCount'] = FollowState::getFollowerCount($user);
 
             return $attributes;
         }),
 
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
-            $actor = $request->getAttribute('actor');
+            $actor = RequestUtil::getActor($request);
             $actor->load('followedUsers');
 
             return $data;
@@ -101,15 +106,18 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowUserController::class))
-        ->prepareDataForSerialization(function (ShowUserController $controller, $data, $request) {
-            $actor = $request->getAttribute('actor');
+        ->prepareDataForSerialization(function (ShowUserController $controller, User $data, $request) {
+            $actor = RequestUtil::getActor($request);
             $actor->load('followedUsers');
+            $data->load('followedUsers');
 
             return $data;
         })
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\Settings())
+        ->default('ianm-follow-users.button-on-profile', false)
+        ->default('ianm-follow-users.stats-on-profile', true)
         ->serializeToForum('ianm-follow-users.button-on-profile', 'ianm-follow-users.button-on-profile', 'boolVal')
-        ->default('ianm-follow-users.button-on-profile', false),
+        ->serializeToForum('ianm-follow-users.stats-on-profile', 'ianm-follow-users.stats-on-profile', 'boolVal'),
 ];
