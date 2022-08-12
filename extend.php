@@ -84,17 +84,7 @@ return [
         ->hasMany('followedUsers', UserSerializer::class),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(function (UserSerializer $serializer, User $user, array $attributes): array {
-            $actor = $serializer->getActor();
-
-            $attributes['followed'] = FollowState::for($actor, $user);
-            $attributes['canBeFollowed'] = $actor->can('follow', $user);
-
-            $attributes['followingCount'] = FollowState::getFollowingCount($user);
-            $attributes['followerCount'] = FollowState::getFollowerCount($user);
-
-            return $attributes;
-        }),
+        ->attributes(AddUserAttributes::class),
 
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
