@@ -51,7 +51,9 @@ export default function addFollowControls() {
 
     const followButton = (
       <Button className="Button" icon="fas fa-user-friends" onclick={openFollowLevelModal.bind(this, user)}>
-        {app.translator.trans(`ianm-follow-users.forum.user_controls.${user.followed() ? 'unfollow_button' : 'follow_button'}`)}
+        {user.followed()
+          ? app.translator.trans(`ianm-follow-users.forum.badge.label.${user.followed()}`)
+          : app.translator.trans('ianm-follow-users.forum.user_controls.follow_button')}
       </Button>
     );
 

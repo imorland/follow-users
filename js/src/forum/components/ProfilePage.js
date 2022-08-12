@@ -1,10 +1,9 @@
 import app from 'flarum/forum/app';
-import Button from 'flarum/common/components/Button';
-import Link from 'flarum/common/components/Link';
-import avatar from 'flarum/common/helpers/avatar';
-import username from 'flarum/common/helpers/username';
 import UserPage from 'flarum/forum/components/UserPage';
 import { SelectFollowUserTypeModal } from './SelectFollowLevelModal';
+import Placeholder from 'flarum/common/components/Placeholder';
+import FollowedUserListItem from './FollowedUserListItem';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 
 export default class ProfilePage extends UserPage {
   oninit(vnode) {
@@ -17,6 +16,9 @@ export default class ProfilePage extends UserPage {
     this.loading = true;
     this.followedUsers = app.session.user.followedUsers();
     this.loadUser(app.session.user.username());
+
+    this.loading = false;
+    m.redraw();
   }
 
   changeUserFollowOptions(user) {
@@ -24,46 +26,34 @@ export default class ProfilePage extends UserPage {
   }
 
   content() {
+    if (this.loading) {
+      return (
+        <div className="DiscussionList">
+          <LoadingIndicator />
+        </div>
+      );
+    }
+
     if (this.followedUsers.length === 0) {
       return (
-        <div class="Placeholder">
-          <p>{app.translator.trans('ianm-follow-users.forum.profile_page.no_following')}</p>
+        <div className="DiscussionList">
+          <Placeholder text={app.translator.trans('ianm-follow-users.forum.profile_page.no_following')} />
         </div>
       );
     }
 
     return (
-      <table className="NotificationGrid followPage-grid">
-        {this.followedUsers.map((user, i) => {
-          return (
-            <tr class="followPage-user">
-              <td>
-                <Link href={app.route.user(user)}>
-                  <h3>
-                    {avatar(user, { className: 'followPage-avatar' })}
-                    <div class="followPage-userInfo">
-                      {username(user)}
-
-                      <span class="followPage-type">{app.translator.trans(`ianm-follow-users.forum.badge.label.${user.followed()}`)}</span>
-                    </div>
-                  </h3>
-                </Link>
-              </td>
-
-              <td className="followPage-button">
-                <Button
-                  icon="fas fa-user-friends"
-                  type="button"
-                  className="Button Button--warning"
-                  onclick={() => this.changeUserFollowOptions(user)}
-                >
-                  {app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')}
-                </Button>
-              </td>
-            </tr>
-          );
-        })}
-      </table>
+      <div className="FollowedUserList">
+        <ul className="FollowedUserList-users">
+          {this.followedUsers.map((user) => {
+            return (
+              <li key={user.id()} data-id={user.id()}>
+                <FollowedUserListItem user={user} />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 
