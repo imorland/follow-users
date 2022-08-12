@@ -1,29 +1,44 @@
-.followPage {
-  &-user {
-    a {
-      text-decoration: none !important;
-
-      &:hover .username {
-        text-decoration: underline;
-      }
-
-      h3 {
-        display: flex;
-        align-items: center;
-      }
-    }
+.FollowedUserList {
+  .FollowedUserList-users {
+      list-style: none;
+      padding: 0;
+      clear: both;
+  }
+  .User {
+      margin-bottom: 1px;
   }
 
-  &-userInfo {
-    margin-left: 8px;
-    display: flex;
-    flex-direction: column;
+  .UserCard--follow-list {
+      width: 100%;
+      .box-shadow(0 2px 6px @shadow-color);
+      margin-bottom: 10px;
+
+      &,
+      .darkenBackground {
+          border-radius: @border-radius;
+      }
+      .container {
+          width: auto !important;
+          padding: 20px !important;
+      }
+      .UserCard-identity {
+          font-size: 22px;
+      }
+      .Button {
+          @media @phone {
+              color: #fff !important;
+          }
+      }
+
+      @media @tablet-up {
+          .Dropdown-menu {
+              // for not overlapping header
+              z-index: @zindex-header - 1;
+          }
+      }
   }
 
-  &-type {
-    margin-top: 2px;
-    color: @control-color;
-    font-weight: normal;
-    font-size: 13px;
+  &-loadMore {
+      text-align: center;
   }
 }
