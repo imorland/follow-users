@@ -35,8 +35,9 @@ class AddUserAttributes
         $attributes['followed'] = FollowState::for($actor, $user);
         $attributes['canBeFollowed'] = $actor->can('follow', $user);
 
+        $attributes['followingCount'] = FollowState::getFollowingCount($user);
+
         if ((bool) $this->settings->get('ianm-follow-users.stats-on-profile')) {
-            $attributes['followingCount'] = FollowState::getFollowingCount($user);
             $attributes['followerCount'] = FollowState::getFollowerCount($user);
         }
 
