@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers;
 
 use Flarum\Api\Serializer\UserSerializer;
@@ -12,12 +22,12 @@ class AddUserAttributes
      * @var SettingsRepositoryInterface
      */
     protected $settings;
-    
+
     public function __construct(SettingsRepositoryInterface $settings)
     {
         $this->settings = $settings;
     }
-    
+
     public function __invoke(UserSerializer $serializer, User $user, array $attributes): array
     {
         $actor = $serializer->getActor();
