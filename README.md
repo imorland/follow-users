@@ -24,8 +24,14 @@ Building on top of `fof/follow-tags`, this extension allows for following of ind
 ##### Following dropdown
 ![image](https://user-images.githubusercontent.com/16573496/102770549-40f90780-437c-11eb-801e-a7fb9e08e704.png)
 
+##### User profile page following view
+![image](https://user-images.githubusercontent.com/16573496/184591121-c11ec7ea-91fc-4836-9ded-4b33bc230fca.png)
+
+##### User card integration
+![image](https://user-images.githubusercontent.com/16573496/184591272-4295dbc3-5a79-4213-9d06-d7de8f444ab5.png)
+
 ##### `fof/user-directory` integration
-![image](https://user-images.githubusercontent.com/16573496/119695069-ba25ea80-be45-11eb-9f0e-ff7545f29261.png)
+![image](https://user-images.githubusercontent.com/16573496/184591023-effd4e19-8719-48b8-8be1-11a1c38e5c74.png)
 
 ##### Notification preferences
 ![image](https://user-images.githubusercontent.com/16573496/102770611-55d59b00-437c-11eb-8d57-408770c34d69.png)
