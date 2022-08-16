@@ -34,10 +34,15 @@ export default function addFollowControls() {
 
   extend(UserCard.prototype, 'view', function (view) {
     const user = this.attrs.user;
-    if (!app.forum.attribute('ianm-follow-users.button-on-profile') || !app.session.user || app.session.user === user || !user.canBeFollowed()) {
+    if (
+      !app.forum.attribute('ianm-follow-users.button-on-profile') ||
+      !app.session.user ||
+      app.session.user === user ||
+      !user.canBeFollowed() ||
+      view.attrs.className.includes('UserCard--small')
+    ) {
       return;
     }
-
     /**
      * Opens the SelectFollowLevelModal with the provided user.
      *
