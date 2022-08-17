@@ -7,21 +7,21 @@ import User from 'flarum/common/models/User';
 import UserCard from 'flarum/forum/components/UserCard';
 import { findFirstVdomChild } from './util/findVdomChild';
 
+/**
+ * Opens the SelectFollowLevelModal with the provided user.
+ *
+ * @param {User} user
+ */
+function openFollowLevelModal(user) {
+  if (!(user instanceof User)) return;
+
+  app.modal.show(SelectFollowUserTypeModal, { user });
+}
+
 export default function addFollowControls() {
   extend(UserControls, 'userControls', function (items, user) {
     if (!app.session.user || app.session.user === user || !user.canBeFollowed() || app.forum.attribute('ianm-follow-users.button-on-profile')) {
       return;
-    }
-
-    /**
-     * Opens the SelectFollowLevelModal with the provided user.
-     *
-     * @param {User} user
-     */
-    function openFollowLevelModal(user) {
-      if (!(user instanceof User)) return;
-
-      app.modal.show(SelectFollowUserTypeModal, { user });
     }
 
     items.add(
@@ -42,16 +42,6 @@ export default function addFollowControls() {
       view.attrs.className.includes('UserCard--small')
     ) {
       return;
-    }
-    /**
-     * Opens the SelectFollowLevelModal with the provided user.
-     *
-     * @param {User} user
-     */
-    function openFollowLevelModal(user) {
-      if (!(user instanceof User)) return;
-
-      app.modal.show(SelectFollowUserTypeModal, { user });
     }
 
     const followButton = (
