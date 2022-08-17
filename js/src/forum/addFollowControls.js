@@ -20,7 +20,13 @@ function openFollowLevelModal(user) {
 
 export default function addFollowControls() {
   extend(UserControls, 'userControls', function (items, user) {
-    if (!app.session.user || app.session.user === user || !user.canBeFollowed() || app.forum.attribute('ianm-follow-users.button-on-profile')) {
+    if (
+      !app.session.user ||
+      app.session.user === user ||
+      !user.canBeFollowed() ||
+      (app.forum.attribute('ianm-follow-users.button-on-profile') &&
+        !(app.current.data.routeName === 'fof_user_directory' && app.forum.attribute('userDirectorySmallCards')))
+    ) {
       return;
     }
 
