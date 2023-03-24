@@ -10,7 +10,7 @@ export default function () {
 
       items.add(
         'followed-users',
-        <LinkButton href={app.route('followedUsers')} icon="fas fa-user-friends">
+        <LinkButton href={app.route('user.followedUsers', { username: this.user.username() })} icon="fas fa-user-friends">
           {app.translator.trans('ianm-follow-users.forum.profile_link')}
           <span className="Button-badge">{followedUsersCount}</span>
         </LinkButton>

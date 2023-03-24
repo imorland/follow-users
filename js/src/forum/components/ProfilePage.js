@@ -14,8 +14,8 @@ export default class ProfilePage extends UserPage {
 
   refresh() {
     this.loading = true;
-    this.followedUsers = app.session.user.followedUsers();
     this.loadUser(app.session.user.username());
+    this.followedUsers = app.session.user.followedUsers();
 
     this.loading = false;
     m.redraw();
