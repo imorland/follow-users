@@ -1,5 +1,5 @@
 import app from 'flarum/forum/app';
-import Notification from 'flarum/common/components/Notification';
+import Notification from 'flarum/forum/components/Notification';
 
 export default class NewDiscussionNotification extends Notification {
   icon() {
