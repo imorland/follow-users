@@ -2,11 +2,8 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 
-import Model from 'flarum/common/Model';
-import User from 'flarum/common/models/User';
 import addFollowControls from './addFollowControls';
 import addProfilePage from './addProfilePage';
-import ProfilePage from './components/ProfilePage';
 import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
 import NewFollowerNotification from './components/NewFollowerNotification';
@@ -16,19 +13,11 @@ import addPrivacySetting from './addPrivacySetting';
 import addFollowingUsers from './addFollowingUsers';
 import addUserCardStats from './addUserCardStats';
 
+export { default as extend } from './extend';
+
 app.initializers.add(
   'ianm-follow-users',
   () => {
-    User.prototype.followed = Model.attribute('followed');
-    User.prototype.followedUsers = Model.hasMany('followedUsers');
-    User.prototype.followedBy = Model.hasMany('followedBy');
-    User.prototype.blocksFollow = Model.attribute('blocksFollow');
-    User.prototype.canBeFollowed = Model.attribute('canBeFollowed');
-    User.prototype.followingCount = Model.attribute('followingCount');
-    User.prototype.followerCount = Model.attribute('followerCount');
-
-    app.routes.followedUsers = { path: '/followedUsers', component: ProfilePage };
-
     addFollowControls();
     addProfilePage();
     addFollowBadge();

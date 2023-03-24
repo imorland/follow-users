@@ -13,6 +13,7 @@
 namespace IanM\FollowUsers;
 
 use Flarum\Api\Controller\ListUsersController;
+use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\Api\Serializer\CurrentUserSerializer;
@@ -104,6 +105,9 @@ return [
             return $data;
         })
         ->addInclude(['followedUsers', 'followedBy']),
+
+    (new Extend\ApiController(ShowForumController::class))
+        ->addInclude('actor.followedUsers'),
 
     (new Extend\Settings())
         ->default('ianm-follow-users.button-on-profile', false)
