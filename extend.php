@@ -28,7 +28,6 @@ use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 return [

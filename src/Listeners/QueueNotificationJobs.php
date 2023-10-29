@@ -29,12 +29,12 @@ class QueueNotificationJobs
      * @var Queue
      */
     protected $queue;
-    
+
     public function __construct(Queue $queue)
     {
         $this->queue = $queue;
     }
-    
+
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Following::class, [$this, 'whenFollowed']);

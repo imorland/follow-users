@@ -16,10 +16,10 @@ use Flarum\Database\AbstractModel;
 use Flarum\User\User;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property int $followed_user_id
- * @property string $subscription
+ * @property int            $id
+ * @property int            $user_id
+ * @property int            $followed_user_id
+ * @property string         $subscription
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */

@@ -80,6 +80,7 @@ class SaveFollowedToDatabase
 
     /**
      * @param User $user
+     *
      * @return BelongsToMany
      */
     protected function followedUsers(User $user): BelongsToMany
