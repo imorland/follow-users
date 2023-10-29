@@ -28,6 +28,8 @@ use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 return [
     (new Extend\Frontend('forum'))
@@ -41,11 +43,11 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
-        ->relationship('followedUsers', function (AbstractModel $model) {
+        ->relationship('followedUsers', function (AbstractModel $model): BelongsToMany {
             return $model->belongsToMany(User::class, 'user_followers', 'user_id', 'followed_user_id')
                 ->withPivot('subscription');
         })
-        ->relationship('followedBy', function (AbstractModel $model) {
+        ->relationship('followedBy', function (AbstractModel $model): BelongsToMany {
             return $model->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id')
                 ->withPivot('subscription');
         }),

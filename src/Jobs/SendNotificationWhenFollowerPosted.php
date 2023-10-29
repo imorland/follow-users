@@ -45,9 +45,6 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
             return;
         }
 
-        /**
-         * @var Collection
-         */
         $discussion = $this->post->discussion;
 
         $actor = $this->post->user;
