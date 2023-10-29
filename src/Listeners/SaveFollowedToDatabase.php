@@ -14,10 +14,12 @@ namespace IanM\FollowUsers\Listeners;
 
 use Carbon\Carbon;
 use Flarum\User\Event\Saving;
+use Flarum\User\User;
 use IanM\FollowUsers\Events\Following;
 use IanM\FollowUsers\Events\Unfollowing;
 use IanM\FollowUsers\FollowState;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
 
 class SaveFollowedToDatabase
@@ -48,7 +50,7 @@ class SaveFollowedToDatabase
             $subscription = $attributes['followUsers'];
 
             $changed = false;
-            $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
+            $exists = $this->followedUsers($actor)->where('followed_user_id', $user->id)->exists();
 
             if (!empty($subscription)) {
                 $actor->assertCan('follow', $user);
@@ -65,7 +67,7 @@ class SaveFollowedToDatabase
                 $changed = $state->wasChanged();
             } elseif ($exists) {
                 $this->events->dispatch(new Unfollowing($actor, $user));
-                $actor->followedUsers()->detach($user);
+                $this->followedUsers($actor)->detach($user);
                 $changed = true;
             }
 
@@ -74,5 +76,15 @@ class SaveFollowedToDatabase
                 $user->load('followedBy');
             }
         }
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return BelongsToMany
+     */
+    protected function followedUsers(User $user): BelongsToMany
+    {
+        return $user->followedUsers();
     }
 }

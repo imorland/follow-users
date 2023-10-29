@@ -26,7 +26,7 @@ class Unfollowing
     /**
      * The user who is being unfollowed.
      *
-     * @var array
+     * @var User
      */
     public $user;
 

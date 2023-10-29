@@ -20,10 +20,21 @@ use Flarum\Post\Post;
 use IanM\FollowUsers\Events\Following;
 use IanM\FollowUsers\Events\Unfollowing;
 use IanM\FollowUsers\Jobs;
+use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Events\Dispatcher;
 
 class QueueNotificationJobs
 {
+    /**
+     * @var Queue
+     */
+    protected $queue;
+
+    public function __construct(Queue $queue)
+    {
+        $this->queue = $queue;
+    }
+
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Following::class, [$this, 'whenFollowed']);
@@ -35,14 +46,14 @@ class QueueNotificationJobs
 
     public function whenFollowed(Following $event)
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenUserIsFollowed($event->actor, $event->user)
         );
     }
 
     public function whenUnfollowed(Unfollowing $event)
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenUserIsUnfollowed($event->actor, $event->user)
         );
     }
@@ -50,7 +61,7 @@ class QueueNotificationJobs
     public function whenDiscussionStarted(Started $event)
     {
         $event->discussion->afterSave(function (Discussion $discussion) {
-            resolve('flarum.queue.connection')->push(
+            $this->queue->push(
                 new Jobs\SendNotificationWhenDiscussionIsStarted($discussion)
             );
         });
@@ -63,7 +74,7 @@ class QueueNotificationJobs
                 return;
             }
 
-            resolve('flarum.queue.connection')->push(
+            $this->queue->push(
                 new Jobs\SendNotificationWhenFollowerPosted($post, $post->discussion->last_post_number)
             );
         });
@@ -75,7 +86,7 @@ class QueueNotificationJobs
             return;
         }
 
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             $event->post->number == 1
                 ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
                 : new Jobs\SendNotificationWhenFollowerPosted($event->post, $event->post->number - 1)

@@ -26,7 +26,7 @@ class Following
     /**
      * The user who is being followed.
      *
-     * @var array
+     * @var User
      */
     public $user;
 

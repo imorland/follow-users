@@ -15,16 +15,18 @@ namespace IanM\FollowUsers;
 use Flarum\Database\AbstractModel;
 use Flarum\User\User;
 
+/**
+ * @property int            $id
+ * @property int            $user_id
+ * @property int            $followed_user_id
+ * @property string         $subscription
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class FollowState extends AbstractModel
 {
-    /**
-     * {@inheritdoc}
-     */
     protected $table = 'user_followers';
 
-    /**
-     * {@inheritDoc}
-     */
     protected $fillable = ['user_id', 'followed_user_id', 'subscription', 'updated_at'];
 
     /**
