@@ -15,7 +15,7 @@
         "forum": "https://discuss.flarum.org/d/25701"
     },
     "require": {
-        "flarum/core": "^1.7.0",
+        "flarum/core": "^1.8.3",
         "fof/follow-tags": "^1.1.4"
     },
     "authors": [
