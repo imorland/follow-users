@@ -26,7 +26,7 @@ class FollowUser extends Type
             ->where('user_id', $this->user->id)
             ->each(function (FollowState $followState) use (&$dataExport) {
                 $dataExport[] = [
-                    "follow-users/following/{$followState->followed_user_id}.json" => $this->encodeForExport($this->sanitize($followState)),
+                    "follow-users/following/{$followState->followed_user_id}.json" => $this->encodeForExport($this->sanitizeFollowing($followState)),
                 ];
             });
 
@@ -34,17 +34,24 @@ class FollowUser extends Type
             ->where('followed_user_id', $this->user->id)
             ->each(function (FollowState $followState) use (&$dataExport) {
                 $dataExport[] = [
-                    "follow-users/followers/{$followState->user_id}.json" => $this->encodeForExport($this->sanitize($followState)),
+                    "follow-users/followers/{$followState->user_id}.json" => $this->encodeForExport($this->sanitizeFollowed($followState)),
                 ];
             });
 
         return $dataExport;
     }
 
-    protected function sanitize(FollowState $state): array
+    protected function sanitizeFollowing(FollowState $state): array
     {
         return Arr::except($state->toArray(), [
-            'user_id', 'id', 'followed_user_id',
+            'user_id', 'id',
+        ]);
+    }
+
+    protected function sanitizeFollowed(FollowState $state): array
+    {
+        return Arr::except($state->toArray(), [
+            'id', 'followed_user_id',
         ]);
     }
 
