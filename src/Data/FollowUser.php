@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Data;
 
 use Blomstra\Gdpr\Data\Type;
@@ -16,7 +26,7 @@ class FollowUser extends Type
             ->where('user_id', $this->user->id)
             ->each(function (FollowState $followState) use (&$dataExport) {
                 $dataExport[] = [
-                    "follow-users/following/{$followState->followed_user_id}.json" => $this->encodeForExport($this->sanitize($followState))
+                    "follow-users/following/{$followState->followed_user_id}.json" => $this->encodeForExport($this->sanitize($followState)),
                 ];
             });
 
@@ -24,7 +34,7 @@ class FollowUser extends Type
             ->where('followed_user_id', $this->user->id)
             ->each(function (FollowState $followState) use (&$dataExport) {
                 $dataExport[] = [
-                    "follow-users/followers/{$followState->user_id}.json" => $this->encodeForExport($this->sanitize($followState))
+                    "follow-users/followers/{$followState->user_id}.json" => $this->encodeForExport($this->sanitize($followState)),
                 ];
             });
 

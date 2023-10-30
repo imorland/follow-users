@@ -119,7 +119,7 @@ return [
 
     (new Extend\Conditional())
         ->whenExtensionEnabled('blomstra-gdpr', fn () => [
-            (new UserData)
-                ->addType(Data\FollowUser::class,)
+            (new UserData())
+                ->addType(Data\FollowUser::class),
         ]),
 ];
