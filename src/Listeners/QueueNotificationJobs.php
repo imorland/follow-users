@@ -61,7 +61,7 @@ class QueueNotificationJobs
     public function whenDiscussionStarted(Started $event)
     {
         $event->discussion->afterSave(function (Discussion $discussion) {
-            $this->queue->push(
+            resolve('flarum.queue.connection')->push(
                 new Jobs\SendNotificationWhenDiscussionIsStarted($discussion)
             );
         });
@@ -74,7 +74,7 @@ class QueueNotificationJobs
                 return;
             }
 
-            $this->queue->push(
+            resolve('flarum.queue.connection')->push(
                 new Jobs\SendNotificationWhenFollowerPosted($post, $post->discussion->last_post_number)
             );
         });
