@@ -54,3 +54,8 @@ composer require ianm/follow-users:"*"
 ```sh
 composer update ianm/follow-users
 ```
+
+## Support
+
+Please consider supporting my extension development and maintenance work.
+- [Buy me a coffee](https://www.buymeacoffee.com/ianm1)

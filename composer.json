@@ -14,6 +14,11 @@
         "source": "https://github.com/imorland/follow-users",
         "forum": "https://discuss.flarum.org/d/25701"
     },
+    "funding": [
+        {
+            "url": "https://www.buymeacoffee.com/ianm1"
+        }
+    ],
     "require": {
         "flarum/core": "^1.8.3",
         "fof/follow-tags": "^1.1.4"
