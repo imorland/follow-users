@@ -41,7 +41,7 @@ export class SelectFollowUserTypeModal extends Modal {
   className = () => 'iam_follow_users-selectFollowLevelModal';
 
   title() {
-    return this.trans('title', { username: <em>{this.state.user?.username?.()}</em> });
+    return this.trans('title', { username: <em>{this.state.user?.displayName?.()}</em> });
   }
 
   content() {
