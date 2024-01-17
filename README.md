@@ -58,4 +58,5 @@ composer update ianm/follow-users
 ## Support
 
 Please consider supporting my extension development and maintenance work.
-- [Buy me a coffee](https://www.buymeacoffee.com/ianm1)
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/default-orange.png)](https://www.buymeacoffee.com/ianm1)
