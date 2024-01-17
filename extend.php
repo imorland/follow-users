@@ -34,8 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/resources/less/forum.less')
-        ->route('/followedUsers', 'followed.users.view'),
+        ->css(__DIR__.'/resources/less/forum.less'),
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),

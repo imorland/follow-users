@@ -70,7 +70,7 @@ class QueueNotificationJobs
     public function whenPostCreated(PostSaving $event)
     {
         $event->post->afterSave(function (Post $post) {
-            if (!$post->exists || !$post->discussion->exists || $post->number == 1 || !$post->wasRecentlyCreated) {
+            if (!$post->exists || !$post->discussion->exists || $post->number === 1 || !$post->wasRecentlyCreated) {
                 return;
             }
 
@@ -87,7 +87,7 @@ class QueueNotificationJobs
         }
 
         $this->queue->push(
-            $event->post->number == 1
+            $event->post->number === 1
                 ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
                 : new Jobs\SendNotificationWhenFollowerPosted($event->post, $event->post->number - 1)
         );

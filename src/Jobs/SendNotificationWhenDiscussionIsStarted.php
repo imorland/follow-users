@@ -41,6 +41,7 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
     {
         $firstPost = $this->discussion->firstPost ?? $this->discussion->posts()->orderBy('number')->first();
 
+        /** @phpstan-ignore-next-line */
         if (!$firstPost || null === $this->discussion->user->followedBy) {
             return;
         }
