@@ -81,7 +81,7 @@ class SaveFollowedToDatabase
     /**
      * @param User $user
      *
-     * @return BelongsToMany
+     * @return BelongsToMany<User>
      */
     protected function followedUsers(User $user): BelongsToMany
     {
