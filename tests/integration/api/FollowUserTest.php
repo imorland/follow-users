@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -8,7 +18,7 @@ use Flarum\Testing\integration\TestCase;
 class FollowUserTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -35,13 +45,13 @@ class FollowUserTest extends TestCase
                 '/api/users/3',
                 [
                     'authenticatedAs' => 2,
-                    'json' => [
+                    'json'            => [
                         'data' => [
                             'attributes' => [
-                                'followUsers' => 'follow'
-                            ]
-                        ]
-                    ]
+                                'followUsers' => 'follow',
+                            ],
+                        ],
+                    ],
                 ]
             )
         );
@@ -59,7 +69,7 @@ class FollowUserTest extends TestCase
                 'GET',
                 '/api/users/2',
                 [
-                    'authenticatedAs' => 2
+                    'authenticatedAs' => 2,
                 ]
             )
         );
@@ -91,13 +101,13 @@ class FollowUserTest extends TestCase
                 '/api/users/4',
                 [
                     'authenticatedAs' => 2,
-                    'json' => [
+                    'json'            => [
                         'data' => [
                             'attributes' => [
-                                'followUsers' => 'follow'
-                            ]
-                        ]
-                    ]
+                                'followUsers' => 'follow',
+                            ],
+                        ],
+                    ],
                 ]
             )
         );
@@ -116,13 +126,13 @@ class FollowUserTest extends TestCase
                 '/api/users/4',
                 [
                     'authenticatedAs' => 1,
-                    'json' => [
+                    'json'            => [
                         'data' => [
                             'attributes' => [
-                                'followUsers' => 'follow'
-                            ]
-                        ]
-                    ]
+                                'followUsers' => 'follow',
+                            ],
+                        ],
+                    ],
                 ]
             )
         );
@@ -140,7 +150,7 @@ class FollowUserTest extends TestCase
                 'GET',
                 '/api/users/1',
                 [
-                    'authenticatedAs' => 1
+                    'authenticatedAs' => 1,
                 ]
             )
         );
