@@ -20,9 +20,7 @@ class AddBasicUserAttributes
 {
     public function __invoke(BasicUserSerializer $serializer, User $user, array $attributes): array
     {
-        $actor = $serializer->getActor();
-
-        $attributes['followed'] = FollowState::for($actor, $user);
+        $attributes['followed'] = FollowState::for($serializer->getActor(), $user);
 
         return $attributes;
     }

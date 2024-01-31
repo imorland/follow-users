@@ -20,7 +20,6 @@ use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Database\AbstractModel;
 use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
@@ -29,7 +28,6 @@ use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 return [
     (new Extend\Frontend('forum'))
@@ -42,14 +40,8 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
-        ->relationship('followedUsers', function (AbstractModel $model): BelongsToMany {
-            return $model->belongsToMany(User::class, 'user_followers', 'user_id', 'followed_user_id')
-                ->withPivot('subscription');
-        })
-        ->relationship('followedBy', function (AbstractModel $model): BelongsToMany {
-            return $model->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id')
-                ->withPivot('subscription');
-        }),
+        ->belongsToMany('followedUsers', User::class, 'user_followers', 'user_id', 'followed_user_id')
+        ->belongsToMany('followedBy', User::class, 'user_followers', 'followed_user_id', 'user_id'),
 
     (new Extend\View())
         ->namespace('ianm-follow-users', __DIR__.'/resources/views'),

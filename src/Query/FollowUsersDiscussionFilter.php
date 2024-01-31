@@ -40,8 +40,6 @@ class FollowUsersDiscussionFilter implements FilterInterface
 
         /**
          * @var BelongsToMany $followed
-         *
-         * @phpstan-ignore-next-line
          */
         $followed = $actor->followedUsers();
 
