@@ -10,11 +10,12 @@
  *
  */
 
-namespace IanM\FollowUsers;
+namespace IanM\FollowUsers\Api;
 
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
+use IanM\FollowUsers\FollowState;
 
 class AddUserAttributes
 {

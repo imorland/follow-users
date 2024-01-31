@@ -16,6 +16,7 @@ use Blomstra\Gdpr\Extend\UserData;
 use Flarum\Api\Controller\ListUsersController;
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Controller\ShowUserController;
+use Flarum\Api\Controller\UpdateUserController;
 use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
@@ -83,10 +84,10 @@ return [
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
-        ->hasMany('followedUsers', UserSerializer::class),
+        ->hasMany('followedUsers', BasicUserSerializer::class),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(AddUserAttributes::class),
+        ->attributes(Api\AddUserAttributes::class),
 
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
@@ -98,13 +99,7 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowUserController::class))
-        ->prepareDataForSerialization(function (ShowUserController $controller, User $data, $request) {
-            $actor = RequestUtil::getActor($request);
-            $actor->load('followedUsers');
-            $data->load('followedUsers');
-
-            return $data;
-        })
+        ->prepareDataForSerialization(Api\LoadRelations::class)
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowForumController::class))

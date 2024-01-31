@@ -10,12 +10,12 @@
  *
  */
 
-use IanM\FollowUsers\FollowState;
 use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-        FollowState::whereNull('subscription')
+        $schema->getConnection()->table('user_followers')
+            ->whereNull('subscription')
             ->update(['subscription' => 'follow']);
     },
 
