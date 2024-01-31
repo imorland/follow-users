@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -8,7 +18,7 @@ use Flarum\Testing\integration\TestCase;
 class ForumRelationTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
