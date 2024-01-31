@@ -12,6 +12,7 @@
 
 namespace IanM\FollowUsers\Tests\integration\api;
 
+use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 
@@ -88,6 +89,13 @@ class FollowUserTest extends TestCase
         $followedUser = $included[$followedUserIndex];
 
         $this->assertEquals(3, $followedUser['id']);
+
+        // Ensure a "Followed" notification was sent
+        $notification = Notification::where('user_id', 3)->where('type', 'newFollower')->first();
+
+        $this->assertNotNull($notification);
+        $this->assertEquals(2, $notification->from_user_id);
+        $this->assertEquals(2, $notification->subject_id);
     }
 
     /**
