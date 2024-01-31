@@ -85,6 +85,9 @@ return [
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
         ->hasMany('followedUsers', BasicUserSerializer::class),
 
+    (new Extend\ApiSerializer(BasicUserSerializer::class))
+        ->attributes(Api\AddBasicUserAttributes::class),
+        
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(Api\AddUserAttributes::class),
 

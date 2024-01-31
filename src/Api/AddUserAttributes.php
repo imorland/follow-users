@@ -31,10 +31,7 @@ class AddUserAttributes
 
     public function __invoke(UserSerializer $serializer, User $user, array $attributes): array
     {
-        $actor = $serializer->getActor();
-
-        $attributes['followed'] = FollowState::for($actor, $user);
-        $attributes['canBeFollowed'] = $actor->can('follow', $user);
+        $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
 
         $attributes['followingCount'] = FollowState::getFollowingCount($user);
 
