@@ -81,11 +81,10 @@ class SaveFollowedToDatabase
     /**
      * @param User $user
      *
-     * @return BelongsToMany
+     * @return BelongsToMany<User>
      */
     protected function followedUsers(User $user): BelongsToMany
     {
-        /** @phpstan-ignore-next-line */
         return $user->followedUsers();
     }
 }

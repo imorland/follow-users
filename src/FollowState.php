@@ -29,6 +29,11 @@ class FollowState extends AbstractModel
 
     protected $fillable = ['user_id', 'followed_user_id', 'subscription', 'updated_at'];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     /**
      * Get the follow user subscription state for the given User.
      *
