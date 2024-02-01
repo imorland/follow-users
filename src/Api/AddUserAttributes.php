@@ -13,31 +13,15 @@
 namespace IanM\FollowUsers\Api;
 
 use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
-use IanM\FollowUsers\FollowState;
 
 class AddUserAttributes
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
 
-    public function __construct(SettingsRepositoryInterface $settings)
-    {
-        $this->settings = $settings;
-    }
 
     public function __invoke(UserSerializer $serializer, User $user, array $attributes): array
     {
         $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
-
-        $attributes['followingCount'] = FollowState::getFollowingCount($user);
-
-        if ((bool) $this->settings->get('ianm-follow-users.stats-on-profile')) {
-            $attributes['followerCount'] = FollowState::getFollowerCount($user);
-        }
 
         return $attributes;
     }
