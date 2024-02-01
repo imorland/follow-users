@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/follow-users
+ *
+ *  Copyright (c) Ian Morland.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\FollowUsers\Tests\integration\api;
 
 use Flarum\Notification\Notification;
@@ -9,7 +19,7 @@ use Flarum\Testing\integration\TestCase;
 class FollowingUserTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -25,7 +35,7 @@ class FollowingUserTest extends TestCase
             'user_followers' => [
                 ['id' => 1, 'user_id' => 2, 'followed_user_id' => 3, 'created_at' => '2020-01-01 00:00:00', 'updated_at' => '2020-01-01 00:00:00', 'subscription' => 'follow'],
                 ['id' => 2, 'user_id' => 2, 'followed_user_id' => 4, 'created_at' => '2020-01-01 00:00:00', 'updated_at' => '2020-01-01 00:00:00', 'subscription' => 'lurk'],
-                
+
             ],
         ]);
     }
@@ -103,7 +113,7 @@ class FollowingUserTest extends TestCase
 
     /**
      * @dataProvider unfollowUsersDataProvider
-     * 
+     *
      * @test
      */
     public function can_unfollow_users(int $actorId, int $unfollowId)

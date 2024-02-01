@@ -17,8 +17,6 @@ use Flarum\User\User;
 
 class AddUserAttributes
 {
-
-
     public function __invoke(UserSerializer $serializer, User $user, array $attributes): array
     {
         $attributes['canBeFollowed'] = $serializer->getActor()->can('follow', $user);
