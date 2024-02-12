@@ -33,10 +33,9 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
 
     protected $lastPostNumber;
 
-    public function __construct(Post $post, int $lastPostNumber)
+    public function __construct(Post $post)
     {
         $this->post = $post;
-        $this->lastPostNumber = $lastPostNumber;
     }
 
     public function handle(NotificationSyncer $notifications)
