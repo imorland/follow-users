@@ -20,10 +20,29 @@ function openFollowLevelModal(user) {
 
 export default function addFollowControls() {
   extend(UserControls, 'userControls', function (items, user) {
+    const followingBlockingUser = !user.canBeFollowed() && user.followed();
+    const icon = 'fas fa-user-friends';
+
+    if (followingBlockingUser) {
+      items.add(
+        'unfollow',
+        <Button
+          icon={icon}
+          onclick={async () => {
+            const x = await user.save({ followUsers: null });
+            m.redraw();
+          }}
+        >
+          {app.translator.trans('ianm-follow-users.forum.user_controls.unfollow_button')}
+        </Button>
+      );
+    }
+
     if (
       !app.session.user ||
       app.session.user === user ||
       !user.canBeFollowed() ||
+      followingBlockingUser ||
       (app.forum.attribute('ianm-follow-users.button-on-profile') &&
         !(app.current.data.routeName === 'fof_user_directory' && app.forum.attribute('userDirectorySmallCards')))
     ) {
@@ -32,8 +51,8 @@ export default function addFollowControls() {
 
     items.add(
       'follow',
-      <Button icon="fas fa-user-friends" onclick={openFollowLevelModal.bind(this, user)}>
-        {app.translator.trans(`ianm-follow-users.forum.user_controls.${user.followed() ? 'unfollow_button' : 'follow_button'}`)}
+      <Button icon={icon} onclick={openFollowLevelModal.bind(this, user)}>
+        {app.translator.trans(`ianm-follow-users.forum.user_controls.${user.followed() ? 'change_button' : 'follow_button'}`)}
       </Button>
     );
   });
