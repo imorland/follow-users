@@ -75,7 +75,7 @@ class QueueNotificationJobs
             }
 
             resolve('flarum.queue.connection')->push(
-                new Jobs\SendNotificationWhenFollowerPosted($post, $post->discussion->last_post_number)
+                new Jobs\SendNotificationWhenFollowerPosted($post)
             );
         });
     }
@@ -89,7 +89,7 @@ class QueueNotificationJobs
         $this->queue->push(
             $event->post->number === 1
                 ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
-                : new Jobs\SendNotificationWhenFollowerPosted($event->post, $event->post->number - 1)
+                : new Jobs\SendNotificationWhenFollowerPosted($event->post)
         );
     }
 }
