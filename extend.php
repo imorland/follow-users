@@ -75,7 +75,7 @@ return [
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
-        ->hasMany('followedUsers', BasicUserSerializer::class),
+        ->hasMany('followedUsers', UserSerializer::class),
 
     (new Extend\ApiSerializer(BasicUserSerializer::class))
         ->attributes(Api\AddBasicUserAttributes::class),
