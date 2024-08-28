@@ -18,9 +18,9 @@ export default function addUserCardStats() {
       <div className="FollowUsers--stats">
         <span>
           {icon('fas fa-user-friends')}
-          <span className="Button-badge">{followedUsersCount} </span>{' '}
+          <span className="FollowUsers--count">{followedUsersCount} </span>{' '}
           {app.translator.trans('ianm-follow-users.forum.followed', { count: followedUsersCount })}
-          <span className="Button-badge">{followersUsersCount}</span>{' '}
+          <span className="FollowUsers--count">{followersUsersCount}</span>{' '}
           {app.translator.trans('ianm-follow-users.forum.followers', { count: followersUsersCount })}
         </span>
       </div>,
