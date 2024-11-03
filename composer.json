@@ -46,7 +46,7 @@
             },
             "optional-dependencies": [
                 "fof/user-directory",
-                "blomstra/gdpr"
+                "flarum/gdpr"
             ]
         },
         "flagrow": {
@@ -64,7 +64,7 @@
         "flarum/testing": "*",
         "flarum/approval": "*",
         "fof/user-directory": "*",
-        "blomstra/gdpr": "@beta"
+        "flarum/gdpr": "dev-main"
     },
     "autoload-dev": {
         "psr-4": {
