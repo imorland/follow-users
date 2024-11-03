@@ -12,7 +12,7 @@
 
 namespace IanM\FollowUsers;
 
-use Blomstra\Gdpr\Extend\UserData;
+use Flarum\Gdpr\Extend\UserData;
 use Flarum\Api\Controller\ListUsersController;
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Controller\ShowUserController;
@@ -106,7 +106,7 @@ return [
         ->serializeToForum('ianm-follow-users.stats-on-profile', 'ianm-follow-users.stats-on-profile', 'boolVal'),
 
     (new Extend\Conditional())
-        ->whenExtensionEnabled('blomstra-gdpr', fn () => [
+        ->whenExtensionEnabled('flarum-gdpr', fn () => [
             (new UserData())
                 ->addType(Data\FollowUser::class),
         ]),

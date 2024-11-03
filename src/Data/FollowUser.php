@@ -12,7 +12,7 @@
 
 namespace IanM\FollowUsers\Data;
 
-use Blomstra\Gdpr\Data\Type;
+use Flarum\Gdpr\Data\Type;
 use IanM\FollowUsers\FollowState;
 use Illuminate\Support\Arr;
 
