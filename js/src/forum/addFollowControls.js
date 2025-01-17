@@ -51,7 +51,7 @@ export default function addFollowControls() {
 
     items.add(
       'follow',
-      <Button className="Button" icon={icon} onclick={openFollowLevelModal.bind(this, user)}>
+      <Button icon={icon} onclick={openFollowLevelModal.bind(this, user)}>
         {app.translator.trans(`ianm-follow-users.forum.user_controls.${user.followed() ? 'change_button' : 'follow_button'}`)}
       </Button>
     );
