@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 
 import addFollowControls from './addFollowControls';
 import addProfilePage from './addProfilePage';
@@ -30,7 +29,7 @@ app.initializers.add(
     app.notificationComponents.newDiscussionByUser = NewDiscussionNotification;
     app.notificationComponents.newPostByUser = NewPostNotification;
 
-    extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+    extend('flarum/forum/components/NotificationGrid', 'notificationTypes', function (items) {
       items.add('newFollower', {
         name: 'newFollower',
         icon: 'fas fa-user-plus',
