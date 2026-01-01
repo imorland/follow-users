@@ -15,6 +15,8 @@ namespace IanM\FollowUsers\Tests\integration\api;
 use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\User\User;
 
 class FollowUserTest extends TestCase
 {
@@ -27,7 +29,7 @@ class FollowUserTest extends TestCase
         $this->extension('ianm-follow-users');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true],
                 ['id' => 4, 'username' => 'blocker', 'email' => 'blocker@machine.local', 'is_email_confirmed' => true, 'preferences' => json_encode(['blocksFollow' => true])],
@@ -35,9 +37,7 @@ class FollowUserTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function user_can_follow_normal_user_by_default()
     {
         $response = $this->send(
@@ -98,9 +98,7 @@ class FollowUserTest extends TestCase
         $this->assertEquals(2, $notification->subject_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function user_cannot_follow_user_who_blocks_following()
     {
         $response = $this->send(
@@ -123,9 +121,7 @@ class FollowUserTest extends TestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function admin_can_follow_user_who_blocks_following()
     {
         $response = $this->send(
