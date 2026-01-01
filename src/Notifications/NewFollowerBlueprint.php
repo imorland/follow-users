@@ -16,7 +16,6 @@ use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NewFollowerBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {

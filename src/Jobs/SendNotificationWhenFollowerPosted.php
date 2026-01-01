@@ -26,7 +26,7 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected int|null $lastPostNumber = null;
+    protected ?int $lastPostNumber = null;
 
     public function __construct(protected Post $post)
     {

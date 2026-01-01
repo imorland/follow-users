@@ -15,9 +15,9 @@ namespace IanM\FollowUsers\Tests\integration\api;
 use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\User\User;
 
 class FollowingUserTest extends TestCase
 {

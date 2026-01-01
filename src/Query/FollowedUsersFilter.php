@@ -17,7 +17,6 @@ use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
-use Illuminate\Database\Query\Builder;
 
 class FollowedUsersFilter implements FilterInterface
 {
