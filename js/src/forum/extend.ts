@@ -8,6 +8,8 @@ import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
 
 export default [
+  ...commonExtend,
+
   new Extend.Model(User)
     .attribute<boolean>('followed')
     .hasMany<User>('followedUsers')

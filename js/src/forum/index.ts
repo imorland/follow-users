@@ -20,5 +20,5 @@ app.initializers.add(
     addUserCardStats();
     addNotificationSettings();
   },
-  -1
+  -10 // Run before fof-follow-tags (which runs at -1)
 );

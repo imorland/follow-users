@@ -1,14 +1,17 @@
 import app from 'flarum/admin/app';
-import { utils } from 'ext:fof/follow-tags/forum/utils';
-import ianMfollowingPageOptions from '../common/helpers/followingPageOptions';
+import addFollowingPageOption from 'ext:fof/follow-tags/common/utils/addFollowingPageOption';
 
 export { default as extend } from './extend';
 
-app.initializers.add('ianm-follow-users', () => {
-  if ('fof-follow-tags' in flarum.extensions) {
-    // Replace the original function with our customized version
-    utils.followingPageOptions = ianMfollowingPageOptions;
-    // Execute the customized helper to cache the returned list of options
-    utils.followingPageOptions('admin.settings');
-  }
-});
+app.initializers.add(
+  'ianm-follow-users',
+  () => {
+    if ('fof-follow-tags' in flarum.extensions) {
+      // Register our "users" option with fof-follow-tags
+      addFollowingPageOption(() => ({
+        users: app.translator.trans('ianm-follow-users.lib.following_link'),
+      }));
+    }
+  },
+  -10 // Run before fof-follow-tags so our option is registered before the cache is populated
+);
