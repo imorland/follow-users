@@ -1,11 +1,11 @@
 import app from 'flarum/forum/app';
-import Modal from 'flarum/common/components/Modal';
+import FormModal from 'flarum/common/components/FormModal';
 import User from 'flarum/common/models/User';
 import Button from 'flarum/common/components/Button';
 import Select from 'flarum/common/components/Select';
 import { FollowLevels } from '../../common/FollowLevels';
 
-export class SelectFollowUserTypeModal extends Modal {
+export class SelectFollowUserTypeModal extends FormModal {
   state = {
     /**
      * User being followed

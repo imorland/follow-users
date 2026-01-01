@@ -3,7 +3,7 @@ import * as follow_tags from '@fof-follow-tags';
 import followingPageOptions from '../common/helpers/followingPageOptions';
 
 app.initializers.add('ianm-follow-users', () => {
-  app.extensionData
+  app.registry
     .for('ianm-follow-users')
     .registerPermission(
       {
