@@ -47,10 +47,10 @@ return [
         ->namespace('ianm-follow-users', __DIR__.'/resources/views'),
 
     (new Extend\Notification())
-        ->type(Notifications\NewFollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
-        ->type(Notifications\NewUnfollowerBlueprint::class, BasicUserSerializer::class, ['alert'])
-        ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewPostByUserBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
+        ->type(Notifications\NewFollowerBlueprint::class, ['alert'])
+        ->type(Notifications\NewUnfollowerBlueprint::class, ['alert'])
+        ->type(Notifications\NewDiscussionBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\NewPostByUserBlueprint::class, ['alert', 'email']),
 
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveFollowedToDatabase::class)

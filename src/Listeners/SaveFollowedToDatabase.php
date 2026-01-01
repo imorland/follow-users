@@ -24,17 +24,8 @@ use Illuminate\Support\Arr;
 
 class SaveFollowedToDatabase
 {
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @param Dispatcher $events
-     */
-    public function __construct(Dispatcher $events)
+    public function __construct(protected Dispatcher $events)
     {
-        $this->events = $events;
     }
 
     public function handle(Saving $event)

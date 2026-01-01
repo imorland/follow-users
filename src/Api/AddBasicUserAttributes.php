@@ -19,14 +19,8 @@ use IanM\FollowUsers\FollowState;
 
 class AddBasicUserAttributes
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings)
+    public function __construct(protected SettingsRepositoryInterface $settings)
     {
-        $this->settings = $settings;
     }
 
     public function __invoke(BasicUserSerializer $serializer, User $user, array $attributes): array

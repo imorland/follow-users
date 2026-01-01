@@ -25,17 +25,8 @@ class SendNotificationWhenUserIsFollowed implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    protected $user;
-
-    public function __construct(User $actor, $user)
+    public function __construct(protected User $actor, protected $user)
     {
-        $this->actor = $actor;
-        $this->user = $user;
     }
 
     public function handle(NotificationSyncer $notifications)

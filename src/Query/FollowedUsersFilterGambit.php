@@ -23,16 +23,10 @@ use Illuminate\Database\Query\Builder;
 class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInterface
 {
     /**
-     * @var \Flarum\User\UserRepository
-     */
-    protected $users;
-
-    /**
      * @param \Flarum\User\UserRepository $users
      */
-    public function __construct(UserRepository $users)
+    public function __construct(protected UserRepository $users)
     {
-        $this->users = $users;
     }
 
     protected function getGambitPattern()

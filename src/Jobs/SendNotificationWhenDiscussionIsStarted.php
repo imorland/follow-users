@@ -27,14 +27,8 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
     use SerializesModels;
     use ScopeVisibilityTrait;
 
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    public function __construct(Discussion $discussion)
+    public function __construct(protected Discussion $discussion)
     {
-        $this->discussion = $discussion;
     }
 
     public function handle(NotificationSyncer $notifications)

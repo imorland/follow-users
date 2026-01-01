@@ -25,14 +25,8 @@ use Illuminate\Events\Dispatcher;
 
 class QueueNotificationJobs
 {
-    /**
-     * @var Queue
-     */
-    protected $queue;
-
-    public function __construct(Queue $queue)
+    public function __construct(protected Queue $queue)
     {
-        $this->queue = $queue;
     }
 
     public function subscribe(Dispatcher $events)
