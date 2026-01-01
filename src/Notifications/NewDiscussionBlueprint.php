@@ -54,7 +54,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface, A
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'ianm-follow-users::emails.newDiscussion'];
+        return ['text' => 'ianm-follow-users::email.plain.newDiscussion', 'html' => 'ianm-follow-users::email.html.newDiscussion'];
     }
 
     /**

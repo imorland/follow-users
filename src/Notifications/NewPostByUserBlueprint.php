@@ -54,7 +54,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface, A
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'ianm-follow-users::emails.newPost'];
+        return ['text' => 'ianm-follow-users::email.plain.newPost', 'html' => 'ianm-follow-users::email.html.newPost'];
     }
 
     /**

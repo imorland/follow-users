@@ -53,7 +53,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface, Ale
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'ianm-follow-users::emails.newFollower'];
+        return ['text' => 'ianm-follow-users::email.plain.newFollower', 'html' => 'ianm-follow-users::email.html.newFollower'];
     }
 
     /**
