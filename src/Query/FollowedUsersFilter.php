@@ -16,14 +16,17 @@ use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Query\Builder;
+use Flarum\User\UserRepository;
 
-class FollowUsersDiscussionFilter implements FilterInterface
+class FollowedUsersFilter implements FilterInterface
 {
+    public function __construct(protected UserRepository $users)
+    {
+    }
+
     public function getFilterKey(): string
     {
-        return 'following-users';
+        return 'followeduser';
     }
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
@@ -37,21 +40,13 @@ class FollowUsersDiscussionFilter implements FilterInterface
 
     protected function constrain(\Illuminate\Database\Eloquent\Builder $query, User $actor, bool $negate): void
     {
-        if ($actor->isGuest()) {
-            return;
-        }
-
-        $method = $negate ? 'orWhereIn' : 'whereIn';
-
-        /**
-         * @var BelongsToMany $followed
-         */
-        $followed = $actor->followedUsers();
-
-        $query->$method('discussions.id', function (Builder $query) use ($followed) {
-            $query->select('id')
-                ->from('discussions')
-                ->whereIn('user_id', $followed->pluck('users.id')->toArray());
+        $query->where(function ($query) use ($actor, $negate) {
+            $ids = $actor->followedUsers()->pluck('users.id');
+            if ($negate) {
+                $query->whereNotIn('id', $ids);
+            } else {
+                $query->whereIn('id', $ids);
+            }
         });
     }
 }

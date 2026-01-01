@@ -15,6 +15,9 @@ namespace IanM\FollowUsers\Tests\integration\api;
 use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class FollowingUserTest extends TestCase
 {
@@ -27,7 +30,7 @@ class FollowingUserTest extends TestCase
         $this->extension('ianm-follow-users');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true],
                 ['id' => 4, 'username' => 'blocker', 'email' => 'blocker@machine.local', 'is_email_confirmed' => true, 'preferences' => json_encode(['blocksFollow' => true])],
@@ -40,9 +43,7 @@ class FollowingUserTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function following_users_are_included_in_relations_with_correct_following_count_current_user()
     {
         $response = $this->send(
@@ -79,9 +80,7 @@ class FollowingUserTest extends TestCase
         $this->assertEquals(0, $included[1]['attributes']['followingCount']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function correct_following_count_other_user()
     {
         $response = $this->send(
@@ -103,7 +102,7 @@ class FollowingUserTest extends TestCase
         $this->assertEquals(1, $attributes['followerCount']);
     }
 
-    public function unfollowUsersDataProvider(): array
+    public static function unfollowUsersDataProvider(): array
     {
         return [
             [2, 3],
@@ -111,11 +110,8 @@ class FollowingUserTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider unfollowUsersDataProvider
-     *
-     * @test
-     */
+    #[Test]
+    #[DataProvider('unfollowUsersDataProvider')]
     public function can_unfollow_users(int $actorId, int $unfollowId)
     {
         $response = $this->send(

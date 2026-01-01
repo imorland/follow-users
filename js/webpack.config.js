@@ -1,5 +1,3 @@
-const config = require('flarum-webpack-config')({
-  useExtensions: ['fof-follow-tags', 'fof-user-directory']
-});
+const config = require('flarum-webpack-config');
 
-module.exports = config;
+module.exports = config({});

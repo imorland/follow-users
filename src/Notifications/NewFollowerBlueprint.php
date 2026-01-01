@@ -12,27 +12,21 @@
 
 namespace IanM\FollowUsers\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
+class NewFollowerBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var User
-     */
-    public $actor;
-
-    public function __construct(User $actor)
+    public function __construct(public User $actor)
     {
-        $this->actor = $actor;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->actor;
     }
@@ -40,7 +34,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->actor;
     }
@@ -48,7 +42,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return [];
     }
@@ -56,15 +50,15 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
-        return ['text' => 'ianm-follow-users::emails.newFollower'];
+        return ['text' => 'ianm-follow-users::email.plain.newFollower', 'html' => 'ianm-follow-users::email.html.newFollower'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('ianm-follow-users.email.new_follower_subject', [
             '{username}' => $this->actor->username,
@@ -74,7 +68,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newFollower';
     }
@@ -82,7 +76,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return User::class;
     }

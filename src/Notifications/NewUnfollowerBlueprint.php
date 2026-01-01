@@ -12,25 +12,20 @@
 
 namespace IanM\FollowUsers\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\User\User;
 
-class NewUnfollowerBlueprint implements BlueprintInterface
+class NewUnfollowerBlueprint implements BlueprintInterface, AlertableInterface
 {
-    /**
-     * @var User
-     */
-    public $actor;
-
-    public function __construct(User $actor)
+    public function __construct(public User $actor)
     {
-        $this->actor = $actor;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->actor;
     }
@@ -38,7 +33,7 @@ class NewUnfollowerBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->actor;
     }
@@ -46,7 +41,7 @@ class NewUnfollowerBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return [];
     }
@@ -54,7 +49,7 @@ class NewUnfollowerBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newUnfollower';
     }
@@ -62,7 +57,7 @@ class NewUnfollowerBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return User::class;
     }

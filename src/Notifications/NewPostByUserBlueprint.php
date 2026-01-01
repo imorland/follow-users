@@ -13,30 +13,21 @@
 namespace IanM\FollowUsers\Notifications;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
+class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var Post
-     */
-    public $post;
-
-    /**
-     * @param Post $post
-     */
-    public function __construct(Post $post)
+    public function __construct(public Post $post)
     {
-        $this->post = $post;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->post->discussion;
     }
@@ -44,7 +35,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->post->user;
     }
@@ -52,7 +43,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return ['postNumber' => (int) $this->post->number];
     }
@@ -60,15 +51,15 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
-        return ['text' => 'ianm-follow-users::emails.newPost'];
+        return ['text' => 'ianm-follow-users::email.plain.newPost', 'html' => 'ianm-follow-users::email.html.newPost'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('ianm-follow-users.email.new_post_subject', [
             '{title}' => $this->post->discussion->title,
@@ -78,7 +69,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newPostByUser';
     }
@@ -86,7 +77,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }

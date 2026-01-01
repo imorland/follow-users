@@ -17,7 +17,7 @@ use Flarum\User\User;
 
 class UserPolicy extends AbstractPolicy
 {
-    public function follow(User $actor, User $user)
+    public function follow(User $actor, User $user): ?string
     {
         // admins may follow any user
         if ($actor->isAdmin()) {

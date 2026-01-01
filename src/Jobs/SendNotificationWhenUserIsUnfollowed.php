@@ -25,20 +25,11 @@ class SendNotificationWhenUserIsUnfollowed implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    protected $user;
-
-    public function __construct(User $actor, $user)
+    public function __construct(protected User $actor, protected User $user)
     {
-        $this->actor = $actor;
-        $this->user = $user;
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         // Remove discussion notifications generated whilst the user was followed
         Notification::where('type', 'newDiscussionByUser')

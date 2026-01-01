@@ -25,20 +25,11 @@ class SendNotificationWhenUserIsFollowed implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    protected $user;
-
-    public function __construct(User $actor, $user)
+    public function __construct(protected User $actor, protected User $user)
     {
-        $this->actor = $actor;
-        $this->user = $user;
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         // Remove new follower notification from followee, so that a new one can be generated in the future
         Notification::where('type', 'newUnfollower')

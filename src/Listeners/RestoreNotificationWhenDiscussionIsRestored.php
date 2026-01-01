@@ -18,20 +18,11 @@ use IanM\FollowUsers\Notifications\NewDiscussionBlueprint;
 
 class RestoreNotificationWhenDiscussionIsRestored
 {
-    /**
-     * @var NotificationSyncer
-     */
-    protected $notifications;
-
-    /**
-     * @param NotificationSyncer $notifications
-     */
-    public function __construct(NotificationSyncer $notifications)
+    public function __construct(protected NotificationSyncer $notifications)
     {
-        $this->notifications = $notifications;
     }
 
-    public function handle(Restored $event)
+    public function handle(Restored $event): void
     {
         $this->notifications->restore(new NewDiscussionBlueprint($event->discussion));
     }

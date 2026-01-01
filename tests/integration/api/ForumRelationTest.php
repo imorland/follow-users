@@ -14,6 +14,8 @@ namespace IanM\FollowUsers\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
+use PHPUnit\Framework\Attributes\Test;
 
 class ForumRelationTest extends TestCase
 {
@@ -26,15 +28,13 @@ class ForumRelationTest extends TestCase
         $this->extension('ianm-follow-users');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function forum_actor_contains_followed_user_relations()
     {
         $response = $this->send(
