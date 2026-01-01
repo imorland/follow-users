@@ -134,3 +134,6 @@ ianm-follow-users:
 
         description: |
           Receive notifications when <em>{username}</em> starts a new discussion or posts within any discussion.
+    gambits:
+      followeduser:
+        key: followeduser

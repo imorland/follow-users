@@ -12,15 +12,13 @@
 
 namespace IanM\FollowUsers\Query;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
-use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Query\Builder;
 
-class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInterface
+class FollowedUsersFilter implements FilterInterface
 {
     /**
      * @param \Flarum\User\UserRepository $users
@@ -29,38 +27,25 @@ class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInt
     {
     }
 
-    protected function getGambitPattern()
-    {
-        return 'is:followeduser';
-    }
+    /**
+     * {@inheritdoc}
+     */
 
     /**
      * {@inheritdoc}
      */
-    public function apply(SearchState $search, $bit)
-    {
-        return parent::apply($search, $bit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function conditions(SearchState $search, array $matches, $negate)
-    {
-        $this->constrain($search->getQuery(), $search->getActor(), $negate);
-    }
 
     public function getFilterKey(): string
     {
         return 'followeduser';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $this->constrain($filterState->getQuery(), $filterState->getActor(), $negate);
+        $this->constrain($state->getQuery(), $state->getActor(), $negate);
     }
 
-    protected function constrain(Builder $query, User $actor, bool $negate)
+    protected function constrain(\Illuminate\Database\Eloquent\Builder $query, User $actor, bool $negate): void
     {
         $query->where(function ($query) use ($actor, $negate) {
             $ids = $actor->followedUsers()->pluck('users.id');

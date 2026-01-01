@@ -12,8 +12,8 @@
 
 namespace IanM\FollowUsers\Query;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
+use Flarum\Search\Filter\FilterInterface;
+use Flarum\Search\SearchState;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Builder;
@@ -25,12 +25,12 @@ class FollowUsersDiscussionFilter implements FilterInterface
         return 'following-users';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $this->constrain($filterState->getQuery(), $filterState->getActor(), $negate);
+        $this->constrain($state->getQuery(), $state->getActor(), $negate);
     }
 
-    protected function constrain(Builder $query, User $actor, bool $negate)
+    protected function constrain(\Illuminate\Database\Eloquent\Builder $query, User $actor, bool $negate): void
     {
         if ($actor->isGuest()) {
             return;

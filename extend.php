@@ -63,15 +63,6 @@ return [
         ->listen(DiscussionEvent\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class)
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Query\FollowUsersDiscussionFilter::class),
-
-    (new Extend\Filter(UserFilterer::class))
-        ->addFilter(Query\FollowedUsersFilterGambit::class),
-
-    (new Extend\SimpleFlarumSearch(UserSearcher::class))
-        ->addGambit(Query\FollowedUsersFilterGambit::class),
-
     (new Extend\User())
         ->registerPreference('blocksFollow', 'boolval', false),
 
@@ -120,4 +111,7 @@ return [
             (new UserData())
                 ->addType(Data\FollowUser::class),
         ]),
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Query\FollowUsersDiscussionFilter::class)
+        ->addFilter(UserSearcher::class, Query\FollowedUsersFilter::class),
 ];
