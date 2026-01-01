@@ -12,6 +12,7 @@
 
 namespace IanM\FollowUsers\Query;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
@@ -20,20 +21,9 @@ use Illuminate\Database\Query\Builder;
 
 class FollowedUsersFilter implements FilterInterface
 {
-    /**
-     * @param \Flarum\User\UserRepository $users
-     */
     public function __construct(protected UserRepository $users)
     {
     }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    /**
-     * {@inheritdoc}
-     */
 
     public function getFilterKey(): string
     {
@@ -42,6 +32,10 @@ class FollowedUsersFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
+        if (!($state instanceof DatabaseSearchState)) {
+            return;
+        }
+
         $this->constrain($state->getQuery(), $state->getActor(), $negate);
     }
 

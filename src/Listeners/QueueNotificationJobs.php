@@ -29,7 +29,7 @@ class QueueNotificationJobs
     {
     }
 
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(Following::class, [$this, 'whenFollowed']);
         $events->listen(Unfollowing::class, [$this, 'whenUnfollowed']);
@@ -38,43 +38,45 @@ class QueueNotificationJobs
         $events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
     }
 
-    public function whenFollowed(Following $event)
+    public function whenFollowed(Following $event): void
     {
         $this->queue->push(
             new Jobs\SendNotificationWhenUserIsFollowed($event->actor, $event->user)
         );
     }
 
-    public function whenUnfollowed(Unfollowing $event)
+    public function whenUnfollowed(Unfollowing $event): void
     {
         $this->queue->push(
             new Jobs\SendNotificationWhenUserIsUnfollowed($event->actor, $event->user)
         );
     }
 
-    public function whenDiscussionStarted(Started $event)
+    public function whenDiscussionStarted(Started $event): void
     {
         $event->discussion->afterSave(function (Discussion $discussion) {
+            // @phpstan-ignore-next-line
             resolve('flarum.queue.connection')->push(
                 new Jobs\SendNotificationWhenDiscussionIsStarted($discussion)
             );
         });
     }
 
-    public function whenPostCreated(PostSaving $event)
+    public function whenPostCreated(PostSaving $event): void
     {
         $event->post->afterSave(function (Post $post) {
             if (!$post->exists || !$post->discussion->exists || $post->number === 1 || !$post->wasRecentlyCreated) {
                 return;
             }
 
+            // @phpstan-ignore-next-line
             resolve('flarum.queue.connection')->push(
                 new Jobs\SendNotificationWhenFollowerPosted($post)
             );
         });
     }
 
-    public function whenPostApproved(PostWasApproved $event)
+    public function whenPostApproved(PostWasApproved $event): void
     {
         if (!$event->post->discussion->exists) {
             return;

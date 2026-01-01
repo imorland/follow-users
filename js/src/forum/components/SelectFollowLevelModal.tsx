@@ -4,47 +4,56 @@ import User from 'flarum/common/models/User';
 import Button from 'flarum/common/components/Button';
 import Select from 'flarum/common/components/Select';
 import { FollowLevels } from '../../common/FollowLevels';
+import type Mithril from 'mithril';
 
-export class SelectFollowUserTypeModal extends FormModal {
-  state = {
+interface SelectFollowUserTypeModalAttrs {
+  user: User;
+}
+
+interface SelectFollowUserTypeModalState {
+  user: User | null;
+  saving: boolean;
+  followState: 'lurk' | 'follow' | 'unfollow' | undefined;
+}
+
+// @ts-expect-error - FormModal attrs constraint issue
+export class SelectFollowUserTypeModal extends FormModal<SelectFollowUserTypeModalAttrs> {
+  // @ts-expect-error - Custom state structure
+  state: SelectFollowUserTypeModalState = {
     /**
      * User being followed
-     *
-     * @type User | null
      */
     user: null,
 
     /**
      * Is the modal currently saving?
-     *
-     * @type boolean
      */
     saving: false,
 
     /**
      * Currently selected follow level.
      *
-     * @type "lurk" | "follow" | "unfollow"
      * @example "lurk"
      */
     followState: undefined,
   };
 
-  oninit(vnode) {
+  oninit(vnode: Mithril.Vnode<SelectFollowUserTypeModalAttrs, this>) {
     super.oninit(vnode);
 
     this.state.user = this.attrs.user;
 
-    this.state.followState = this.state.user.followed() || 'unfollow';
+    const followedStatus = this.state.user.followed();
+    this.state.followState = (followedStatus === true ? 'follow' : followedStatus) || 'unfollow';
   }
 
-  className = () => 'iam_follow_users-selectFollowLevelModal';
+  className = (): string => 'iam_follow_users-selectFollowLevelModal';
 
-  title() {
+  title(): Mithril.Children {
     return this.trans('title', { username: <em>{this.state.user?.displayName?.()}</em> });
   }
 
-  content() {
+  content(): Mithril.Children {
     // If `this.user` isn't a valid User, exit quickly to prevent complete forum errors.
     if (!(this.state.user instanceof User)) {
       // Show a more detailed error if this happens when the forum is in debug mode.
@@ -57,8 +66,12 @@ export class SelectFollowUserTypeModal extends FormModal {
 
     const user = this.state.user;
 
-    const availableLevelOptions = FollowLevels.reduce((acc, curr) => ({ ...acc, [curr.value]: curr.name() }), {});
+    const availableLevelOptions = FollowLevels.reduce((acc, curr) => ({ ...acc, [curr.value]: curr.name() }), {} as Record<string, string>);
     const selectedLevel = FollowLevels.find((l) => l.value === this.state.followState);
+
+    if (!selectedLevel) {
+      return null;
+    }
 
     return (
       <div class="Modal-body">
@@ -97,41 +110,38 @@ export class SelectFollowUserTypeModal extends FormModal {
   /**
    * Handles a change on the <select> element and saves the new value to a class property.
    */
-  onFollowLevelChange() {
-    /**
-     * @type HTMLInputElement
-     */
-    const selectElement = this.$('.Select-input')[0];
+  onFollowLevelChange(): void {
+    const selectElement = this.$('.Select-input')[0] as HTMLInputElement;
 
-    this.state.followState = selectElement.value || 'unfollow';
+    this.state.followState = (selectElement.value as 'lurk' | 'follow') || 'unfollow';
   }
 
   /**
    * Helper for app.translator.trans, already including the initial keys up to `modals.select_follow_level`.
    */
-  trans(key, ...opts) {
-    return app.translator.trans(`ianm-follow-users.forum.modals.select_follow_level.${key}`, ...opts);
+  trans(key: string, opts?: Record<string, any>): Mithril.Children {
+    return app.translator.trans(`ianm-follow-users.forum.modals.select_follow_level.${key}`, opts || {});
   }
 
-  onsubmit() {
+  onsubmit(): void {
     this.saveFollowLevel();
   }
 
   /**
-   * Sends the new follow state to the
+   * Sends the new follow state to the server
    */
-  async saveFollowLevel() {
+  async saveFollowLevel(): Promise<void> {
     const newFollowState = this.state.followState === 'unfollow' ? null : this.state.followState;
 
     this.state.saving = true;
 
     // Exit early if level not changed
-    if (this.state.user.attribute('following') === newFollowState) {
+    if (this.state.user!.attribute('following') === newFollowState) {
       this.hide();
       return;
     }
 
-    const x = await this.state.user.save({ followUsers: newFollowState });
+    await this.state.user!.save({ followUsers: newFollowState });
 
     this.hide();
   }

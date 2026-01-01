@@ -1,8 +1,14 @@
 import Component from 'flarum/common/Component';
 import UserCard from 'flarum/forum/components/UserCard';
+import type User from 'flarum/common/models/User';
+import type Mithril from 'mithril';
 
-export default class FollowedUserListItem extends Component {
-  view() {
+interface FollowedUserListItemAttrs {
+  user: User;
+}
+
+export default class FollowedUserListItem extends Component<FollowedUserListItemAttrs> {
+  view(): Mithril.Children {
     const { user } = this.attrs;
 
     return (

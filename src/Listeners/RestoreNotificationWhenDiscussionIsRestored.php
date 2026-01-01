@@ -22,7 +22,7 @@ class RestoreNotificationWhenDiscussionIsRestored
     {
     }
 
-    public function handle(Restored $event)
+    public function handle(Restored $event): void
     {
         $this->notifications->restore(new NewDiscussionBlueprint($event->discussion));
     }

@@ -6,21 +6,23 @@ import { SelectFollowUserTypeModal } from './components/SelectFollowLevelModal';
 import User from 'flarum/common/models/User';
 import UserCard from 'flarum/forum/components/UserCard';
 import { findFirstVdomChild } from './util/findVdomChild';
+import ItemList from 'flarum/common/utils/ItemList';
+import type Mithril from 'mithril';
 
 /**
  * Opens the SelectFollowLevelModal with the provided user.
- *
- * @param {User} user
  */
-function openFollowLevelModal(user) {
+function openFollowLevelModal(user: User) {
   if (!(user instanceof User)) return;
 
-  app.modal.show(SelectFollowUserTypeModal, { user });
+  app.modal.show(SelectFollowUserTypeModal as any, { user });
 }
 
 export default function addFollowControls() {
-  extend(UserControls, 'userControls', function (items, user) {
-    const followingBlockingUser = !user.canBeFollowed() && user.followed();
+  // @ts-expect-error - extend typing doesn't handle static method signatures with multiple parameters well
+  extend(UserControls, 'userControls', function (items: ItemList<Mithril.Children>, user: any, _isContextControls?: boolean) {
+    const typedUser = user as User;
+    const followingBlockingUser = !typedUser.canBeFollowed() && typedUser.followed();
     const icon = 'fas fa-user-friends';
 
     if (followingBlockingUser) {
@@ -29,7 +31,7 @@ export default function addFollowControls() {
         <Button
           icon={icon}
           onclick={async () => {
-            const x = await user.save({ followUsers: null });
+            await typedUser.save({ followUsers: null });
             m.redraw();
           }}
         >
@@ -40,8 +42,8 @@ export default function addFollowControls() {
 
     if (
       !app.session.user ||
-      app.session.user === user ||
-      !user.canBeFollowed() ||
+      app.session.user === typedUser ||
+      !typedUser.canBeFollowed() ||
       followingBlockingUser ||
       (app.forum.attribute('ianm-follow-users.button-on-profile') &&
         !(app.current.data.routeName === 'fof_user_directory' && app.forum.attribute('userDirectorySmallCards')))
@@ -51,20 +53,21 @@ export default function addFollowControls() {
 
     items.add(
       'follow',
-      <Button icon={icon} onclick={openFollowLevelModal.bind(this, user)}>
-        {app.translator.trans(`ianm-follow-users.forum.user_controls.${user.followed() ? 'change_button' : 'follow_button'}`)}
+      <Button icon={icon} onclick={openFollowLevelModal.bind(this, typedUser)}>
+        {app.translator.trans(`ianm-follow-users.forum.user_controls.${typedUser.followed() ? 'change_button' : 'follow_button'}`)}
       </Button>
     );
   });
 
-  extend(UserCard.prototype, 'view', function (view) {
+  extend(UserCard.prototype, 'view', function (this: UserCard & { attrs: { user?: User } }, view: Mithril.Vnode) {
     const user = this.attrs.user;
+    if (!user) return;
     if (
       !app.forum.attribute('ianm-follow-users.button-on-profile') ||
       !app.session.user ||
       app.session.user === user ||
       !user.canBeFollowed() ||
-      view.attrs.className.includes('UserCard--small')
+      (view.attrs as any)?.className?.includes('UserCard--small')
     ) {
       return;
     }
@@ -78,7 +81,9 @@ export default function addFollowControls() {
     );
 
     findFirstVdomChild(view, '.UserCard-profile', (vdom) => {
-      vdom.children.splice(2, 0, followButton);
+      if (Array.isArray(vdom.children)) {
+        vdom.children.splice(2, 0, followButton);
+      }
     });
   });
 }

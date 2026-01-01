@@ -12,26 +12,13 @@
 
 namespace IanM\FollowUsers;
 
-use Flarum\Api\Controller\ListUsersController;
-use Flarum\Api\Controller\ShowForumController;
-use Flarum\Api\Controller\ShowUserController;
-use Flarum\Api\Serializer\BasicUserSerializer;
-use Flarum\Api\Serializer\CurrentUserSerializer;
-use Flarum\Api\Serializer\DiscussionSerializer;
-use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Discussion\Event as DiscussionEvent;
-use Flarum\Discussion\Filter\DiscussionFilterer;
-use Flarum\Extend;
-use Flarum\Gdpr\Extend\UserData;
-use Flarum\Http\RequestUtil;
-use Flarum\User\Event\Saving;
-use Flarum\User\Filter\UserFilterer;
-use Flarum\User\Search\UserSearcher;
-use Flarum\User\User;
-use Flarum\Api\Context;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource;
-use Flarum\Api\Schema;
+use Flarum\Discussion\Event as DiscussionEvent;
+use Flarum\Extend;
+use Flarum\Gdpr\Extend\UserData;
+use Flarum\User\Search\UserSearcher;
+use Flarum\User\User;
 
 return [
     (new Extend\Frontend('forum'))
@@ -57,7 +44,6 @@ return [
         ->type(Notifications\NewPostByUserBlueprint::class, ['alert', 'email']),
 
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveFollowedToDatabase::class)
         ->listen(DiscussionEvent\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(DiscussionEvent\Hidden::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(DiscussionEvent\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class)
@@ -69,36 +55,20 @@ return [
     (new Extend\Policy())
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiSerializer(CurrentUserSerializer::class))
-        ->hasMany('followedUsers', UserSerializer::class),
-
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiSerializer(BasicUserSerializer::class))
-        ->attributes(Api\AddBasicUserAttributes::class),
-
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(Api\AddUserAttributes::class),
-
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiController(ListUsersController::class))
-        ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
-            $actor = RequestUtil::getActor($request);
-            $actor->load('followedUsers');
-
-            return $data;
+    // API Resource extensions (Flarum 2.x)
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->fields(Api\UserResourceFields::class)
+        ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
+            return $endpoint->addDefaultInclude(['followedUsers', 'followedBy']);
         })
-        ->addInclude(['followedUsers', 'followedBy']),
+        ->endpoint(Endpoint\Show::class, function (Endpoint\Show $endpoint) {
+            return $endpoint->addDefaultInclude(['followedUsers', 'followedBy']);
+        }),
 
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiController(ShowUserController::class))
-        ->prepareDataForSerialization(Api\LoadRelations::class)
-        ->addInclude(['followedUsers', 'followedBy']),
-
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiController(ShowForumController::class))
-        ->addInclude('actor.followedUsers'),
+    (new Extend\ApiResource(Resource\ForumResource::class))
+        ->endpoint(Endpoint\Show::class, function (Endpoint\Show $endpoint) {
+            return $endpoint->addDefaultInclude(['actor.followedUsers']);
+        }),
 
     (new Extend\Settings())
         ->default('ianm-follow-users.button-on-profile', false)
@@ -111,6 +81,7 @@ return [
             (new UserData())
                 ->addType(Data\FollowUser::class),
         ]),
+
     (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
         ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Query\FollowUsersDiscussionFilter::class)
         ->addFilter(UserSearcher::class, Query\FollowedUsersFilter::class),

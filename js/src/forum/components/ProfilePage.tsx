@@ -4,28 +4,33 @@ import { SelectFollowUserTypeModal } from './SelectFollowLevelModal';
 import Placeholder from 'flarum/common/components/Placeholder';
 import FollowedUserListItem from './FollowedUserListItem';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import type User from 'flarum/common/models/User';
+import type Mithril from 'mithril';
 
 export default class ProfilePage extends UserPage {
-  oninit(vnode) {
+  loading!: boolean;
+  followedUsers!: User[];
+
+  oninit(vnode: Mithril.Vnode) {
     super.oninit(vnode);
 
     this.refresh();
   }
 
-  refresh() {
+  refresh(): void {
     this.loading = true;
-    this.loadUser(app.session.user.username());
-    this.followedUsers = app.session.user.followedUsers();
+    this.loadUser(app.session.user!.username());
+    this.followedUsers = (app.session.user as any).followedUsers();
 
     this.loading = false;
     m.redraw();
   }
 
-  changeUserFollowOptions(user) {
-    app.modal.show(SelectFollowUserTypeModal, { user });
+  changeUserFollowOptions(user: User): void {
+    app.modal.show(SelectFollowUserTypeModal as any, { user });
   }
 
-  content() {
+  content(): Mithril.Children {
     if (this.loading) {
       return (
         <div className="DiscussionList">
@@ -57,7 +62,7 @@ export default class ProfilePage extends UserPage {
     );
   }
 
-  show() {
+  show(): void {
     this.user = app.session.user;
 
     m.redraw();

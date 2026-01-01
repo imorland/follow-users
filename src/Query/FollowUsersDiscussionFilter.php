@@ -12,6 +12,7 @@
 
 namespace IanM\FollowUsers\Query;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
@@ -27,6 +28,10 @@ class FollowUsersDiscussionFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
+        if (!($state instanceof DatabaseSearchState)) {
+            return;
+        }
+
         $this->constrain($state->getQuery(), $state->getActor(), $negate);
     }
 

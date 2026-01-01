@@ -1,7 +1,11 @@
 import commonExtend from '../common/extend';
 import Extend from 'flarum/common/extenders';
-import User from 'flarum/common/models/User';
 import ProfilePage from './components/ProfilePage';
+import User from 'flarum/common/models/User';
+import NewFollowerNotification from './components/NewFollowerNotification';
+import NewUnfollowerNotification from './components/NewUnfollowerNotification';
+import NewDiscussionNotification from './components/NewDiscussionNotification';
+import NewPostNotification from './components/NewPostNotification';
 
 export default [
   new Extend.Model(User)
@@ -13,5 +17,12 @@ export default [
     .attribute<number>('followingCount')
     .attribute<number>('followerCount'),
 
-  new Extend.Routes().add('user.followedUsers', '/u/:username/followedUsers', ProfilePage),
+  new Extend.Routes() //
+    .add('user.followedUsers', '/u/:username/followedUsers', ProfilePage),
+
+  new Extend.Notification() //
+    .add('newFollower', NewFollowerNotification)
+    .add('newUnfollower', NewUnfollowerNotification)
+    .add('newDiscussionByUser', NewDiscussionNotification)
+    .add('newPostByUser', NewPostNotification),
 ];

@@ -26,7 +26,7 @@ class DeleteNotificationWhenDiscussionIsHiddenOrDeleted
     /**
      * @param Hidden|Deleted $event
      */
-    public function handle($event)
+    public function handle($event): void
     {
         $this->notifications->delete(new NewDiscussionBlueprint($event->discussion));
     }

@@ -15,6 +15,7 @@ namespace IanM\FollowUsers\Jobs;
 use Flarum\Database\ScopeVisibilityTrait;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
+use Flarum\User\User;
 use IanM\FollowUsers\Notifications\NewDiscussionBlueprint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +32,7 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
     {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $firstPost = $this->discussion->firstPost ?? $this->discussion->posts()->orderBy('number')->first();
 
@@ -40,7 +41,7 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
         }
 
         /**
-         * @var Collection
+         * @var Collection<int, User>
          */
         $notify = $this->discussion->user->followedBy
             ->reject(function ($user) use ($firstPost) {

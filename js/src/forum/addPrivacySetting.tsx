@@ -8,7 +8,7 @@ export default function () {
       'follow-users-block',
       <Switch
         state={this.user.preferences().blocksFollow}
-        onchange={(value) => {
+        onchange={(value: boolean) => {
           this.blocksFollowLoading = true;
 
           this.user.savePreferences({ blocksFollow: value }).then(() => {
