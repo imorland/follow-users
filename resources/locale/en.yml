@@ -67,47 +67,47 @@ ianm-follow-users:
         cancel_btn: "Cancel"
 
   email:
-    new_discussion_by_user_subject: "[Follow User] {title}"
-    new_follower_subject: "[Follow User] You have a new follower!"
-    new_post_subject: "[Follow User] New post in {title}"
-    new_discussion_by_user_body: |
-      Hey {recipient_display_name},
+    new_discussion_by_user:
+      subject: "{user_display_name} started a discussion"
+      plain:
+        body: |
+          {user_display_name} started a new discussion: {discussion_title}
 
-      {user_display_name} started a new discussion: {discussion_title}
+          {discussion_url}
 
-      To view the new discussion, check out the following link:
+          ---
 
-      {discussion_url}
+          {post_content}
+      html:
+        body: "{user_display_name} started a new discussion: [{discussion_title}]({discussion_url})."
 
-      ---
+    new_follower:
+      subject: "{follower_display_name} followed you"
+      plain:
+        body: |
+          {follower_display_name} started following you, so they'll be notified when you start a new discussion.
 
-      {post_content}
+          {profile_url}
+      html:
+        body: "{follower_display_name} started following you, so they'll be notified when you start a new discussion."
 
-    new_follower_body: |
-      Hey {recipient_display_name},
+    new_post:
+      subject: "{user_display_name} posted in {discussion_title}"
+      plain:
+        body: |
+          {user_display_name} posted in {discussion_title}.
 
-      {follower_display_name} started following you, so they'll be notified when you start a new discussion.
+          {post_url}
 
-      To view their profile, check out the following link:
+          ---
 
-      {profile_url}
+          {post_content}
 
-    new_post_body: |
-      Hey {recipient_display_name},
+          ---
 
-      {user_display_name} posted in a discussion: {discussion_title}
-
-      To view the new activity, check out the following link:
-
-      {post_url}
-
-      ---
-
-      {post_content}
-
-      ---
-
-      You won't receive any more notifications about this discussion until you're up-to-date.
+          You won't receive any more notifications about this discussion until you're up-to-date.
+      html:
+        body: "{user_display_name} posted in [{discussion_title}]({post_url})."
 
   lib:
     following_link: Followed Users
