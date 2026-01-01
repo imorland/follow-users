@@ -28,6 +28,10 @@ use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use Flarum\Api\Context;
+use Flarum\Api\Endpoint;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('forum'))
@@ -74,15 +78,19 @@ return [
     (new Extend\Policy())
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
         ->hasMany('followedUsers', UserSerializer::class),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiSerializer(BasicUserSerializer::class))
         ->attributes(Api\AddBasicUserAttributes::class),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(Api\AddUserAttributes::class),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
             $actor = RequestUtil::getActor($request);
@@ -92,10 +100,12 @@ return [
         })
         ->addInclude(['followedUsers', 'followedBy']),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiController(ShowUserController::class))
         ->prepareDataForSerialization(Api\LoadRelations::class)
         ->addInclude(['followedUsers', 'followedBy']),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiController(ShowForumController::class))
         ->addInclude('actor.followedUsers'),
 
