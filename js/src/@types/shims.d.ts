@@ -7,5 +7,6 @@ declare module 'flarum/common/models/User' {
     canBeFollowed(): boolean;
     followingCount(): number;
     followerCount(): number;
+    followedUsers(): User[];
   }
 }
