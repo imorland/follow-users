@@ -2,7 +2,6 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import UserControls from 'flarum/forum/utils/UserControls';
 import Button from 'flarum/common/components/Button';
-import { SelectFollowUserTypeModal } from './components/SelectFollowLevelModal';
 import User from 'flarum/common/models/User';
 import UserCard from 'flarum/forum/components/UserCard';
 import { findFirstVdomChild } from './util/findVdomChild';
@@ -15,7 +14,7 @@ import type Mithril from 'mithril';
 function openFollowLevelModal(user: User) {
   if (!(user instanceof User)) return;
 
-  app.modal.show(SelectFollowUserTypeModal as any, { user });
+  app.modal.show(() => import('./components/SelectFollowLevelModal'), { user });
 }
 
 export default function addFollowControls() {
