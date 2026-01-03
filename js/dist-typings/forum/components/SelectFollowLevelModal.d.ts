@@ -1,17 +1,17 @@
-import FormModal from 'flarum/common/components/FormModal';
+import FormModal, { IFormModalAttrs } from 'flarum/common/components/FormModal';
 import User from 'flarum/common/models/User';
 import type Mithril from 'mithril';
-interface SelectFollowUserTypeModalAttrs {
+interface SelectFollowLevelModalAttrs extends IFormModalAttrs {
     user: User;
 }
-interface SelectFollowUserTypeModalState {
+interface SelectFollowLevelModalState {
     user: User | null;
     saving: boolean;
     followState: 'lurk' | 'follow' | 'unfollow' | undefined;
 }
-export declare class SelectFollowUserTypeModal extends FormModal<SelectFollowUserTypeModalAttrs> {
-    state: SelectFollowUserTypeModalState;
-    oninit(vnode: Mithril.Vnode<SelectFollowUserTypeModalAttrs, this>): void;
+export default class SelectFollowLevelModal extends FormModal<SelectFollowLevelModalAttrs> {
+    followState: SelectFollowLevelModalState;
+    oninit(vnode: Mithril.Vnode<SelectFollowLevelModalAttrs, this>): void;
     className: () => string;
     title(): Mithril.Children;
     content(): Mithril.Children;
