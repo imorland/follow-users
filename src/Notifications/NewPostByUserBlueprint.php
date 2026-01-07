@@ -61,7 +61,7 @@ class NewPostByUserBlueprint implements BlueprintInterface, MailableInterface, A
      */
     public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
-        return $translator->trans('ianm-follow-users.email.new_post_subject', [
+        return $translator->trans('ianm-follow-users.email.new_post.subject', [
             '{title}' => $this->post->discussion->title,
         ]);
     }
