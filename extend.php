@@ -75,13 +75,15 @@ return [
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
     (new Extend\ApiSerializer(CurrentUserSerializer::class))
-        ->hasMany('followedUsers', UserSerializer::class),
+        ->hasMany('followedUsers', UserSerializer::class)
+        ->hasMany('followedBy', UserSerializer::class),
 
     (new Extend\ApiSerializer(BasicUserSerializer::class))
         ->attributes(Api\AddBasicUserAttributes::class),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(Api\AddUserAttributes::class),
+        ->attributes(Api\AddUserAttributes::class)
+        ->hasMany('followedBy', UserSerializer::class),
 
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
@@ -97,7 +99,8 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowForumController::class))
-        ->addInclude('actor.followedUsers'),
+        ->addInclude('actor.followedUsers')
+        ->addInclude('actor.followedBy'),
 
     (new Extend\Settings())
         ->default('ianm-follow-users.button-on-profile', false)

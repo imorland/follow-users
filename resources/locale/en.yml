@@ -21,6 +21,8 @@ ianm-follow-users:
 
     profile_page:
       no_following: It looks like you're not following anyone.
+      no_followers: It looks like you have no followers yet.
+      followers_link: Followers
 
     user_controls:
       follow_button: => ianm-follow-users.lib.follow
