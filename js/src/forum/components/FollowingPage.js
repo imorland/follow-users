@@ -2,10 +2,10 @@ import app from 'flarum/forum/app';
 import UserPage from 'flarum/forum/components/UserPage';
 import { SelectFollowUserTypeModal } from './SelectFollowLevelModal';
 import Placeholder from 'flarum/common/components/Placeholder';
-import FollowedUserListItem from './FollowedUserListItem';
+import UserListItem from './UserListItem';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 
-export default class ProfilePage extends UserPage {
+export default class FollowingPage extends UserPage {
   oninit(vnode) {
     super.oninit(vnode);
 
@@ -48,7 +48,7 @@ export default class ProfilePage extends UserPage {
           {this.followedUsers.map((user) => {
             return (
               <li key={user.id()} data-id={user.id()}>
-                <FollowedUserListItem user={user} />
+                <UserListItem user={user} />
               </li>
             );
           })}

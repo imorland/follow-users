@@ -1,7 +1,7 @@
 import Component from 'flarum/common/Component';
 import UserCard from 'flarum/forum/components/UserCard';
 
-export default class FollowedUserListItem extends Component {
+export default class UserListItem extends Component {
   view() {
     const { user } = this.attrs;
 

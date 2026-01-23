@@ -1,6 +1,7 @@
 import Extend from 'flarum/common/extenders';
 import User from 'flarum/common/models/User';
-import ProfilePage from './components/ProfilePage';
+import FollowingPage from './components/FollowingPage';
+import FollowersPage from './components/FollowersPage';
 
 export default [
   new Extend.Model(User)
@@ -12,5 +13,7 @@ export default [
     .attribute<number>('followingCount')
     .attribute<number>('followerCount'),
 
-  new Extend.Routes().add('user.followedUsers', '/u/:username/followedUsers', ProfilePage),
+  new Extend.Routes()
+    .add('user.followedUsers', '/u/:username/followedUsers', FollowingPage)
+    .add('user.followers', '/u/:username/followers', FollowersPage),
 ];
