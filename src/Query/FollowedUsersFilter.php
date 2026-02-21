@@ -43,9 +43,9 @@ class FollowedUsersFilter implements FilterInterface
         $query->where(function ($query) use ($actor, $negate) {
             $ids = $actor->followedUsers()->pluck('users.id');
             if ($negate) {
-                $query->whereNotIn('id', $ids);
+                $query->whereNotIn('users.id', $ids);
             } else {
-                $query->whereIn('id', $ids);
+                $query->whereIn('users.id', $ids);
             }
         });
     }

@@ -25,12 +25,6 @@ use PHPUnit\Framework\Attributes\Test;
  *   PDOException: SQLSTATE[42702]: Ambiguous column: column reference "id" is ambiguous
  *
  * The column references must be qualified as `users.id`.
- *
- * Note: SQLite (used in CI) does not raise an ambiguity error, so these tests
- * will appear to pass on the current (buggy) code under SQLite. They exist to:
- *   1. Document and lock in the correct behaviour.
- *   2. Fail on PostgreSQL until the fix is applied.
- *   3. Act as a regression guard going forward.
  */
 class FollowedUsersFilterTest extends TestCase
 {
@@ -60,16 +54,8 @@ class FollowedUsersFilterTest extends TestCase
     public function followeduser_filter_returns_only_followed_users()
     {
         $response = $this->send(
-            $this->request(
-                'GET',
-                '/api/users',
-                [
-                    'authenticatedAs' => 2,
-                    'queryParams'     => [
-                        'filter' => ['followeduser' => '1'],
-                    ],
-                ]
-            )
+            $this->request('GET', '/api/users', ['authenticatedAs' => 2])
+                ->withQueryParams(['filter' => ['followeduser' => '1']])
         );
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -87,16 +73,8 @@ class FollowedUsersFilterTest extends TestCase
     public function negated_followeduser_filter_excludes_followed_users()
     {
         $response = $this->send(
-            $this->request(
-                'GET',
-                '/api/users',
-                [
-                    'authenticatedAs' => 2,
-                    'queryParams'     => [
-                        'filter' => ['-followeduser' => '1'],
-                    ],
-                ]
-            )
+            $this->request('GET', '/api/users', ['authenticatedAs' => 2])
+                ->withQueryParams(['filter' => ['-followeduser' => '1']])
         );
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -114,16 +92,8 @@ class FollowedUsersFilterTest extends TestCase
     public function followeduser_filter_returns_empty_when_actor_follows_nobody()
     {
         $response = $this->send(
-            $this->request(
-                'GET',
-                '/api/users',
-                [
-                    'authenticatedAs' => 5,
-                    'queryParams'     => [
-                        'filter' => ['followeduser' => '1'],
-                    ],
-                ]
-            )
+            $this->request('GET', '/api/users', ['authenticatedAs' => 5])
+                ->withQueryParams(['filter' => ['followeduser' => '1']])
         );
 
         $this->assertEquals(200, $response->getStatusCode());
