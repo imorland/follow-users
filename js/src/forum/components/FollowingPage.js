@@ -2,22 +2,25 @@ import app from 'flarum/forum/app';
 import UserPage from 'flarum/forum/components/UserPage';
 import { SelectFollowUserTypeModal } from './SelectFollowLevelModal';
 import Placeholder from 'flarum/common/components/Placeholder';
-import FollowedUserListItem from './FollowedUserListItem';
+import UserListItem from './UserListItem';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 
-export default class ProfilePage extends UserPage {
+export default class FollowingPage extends UserPage {
   oninit(vnode) {
     super.oninit(vnode);
 
-    this.refresh();
+    this.loading = true;
+    this.followedUsers = [];
+
+    this.loadUser(m.route.param('username'));
   }
 
-  refresh() {
-    this.loading = true;
-    this.loadUser(app.session.user.username());
-    this.followedUsers = app.session.user.followedUsers();
+  show(user) {
+    super.show(user);
 
+    this.followedUsers = user.followedUsers() || [];
     this.loading = false;
+
     m.redraw();
   }
 
@@ -48,18 +51,12 @@ export default class ProfilePage extends UserPage {
           {this.followedUsers.map((user) => {
             return (
               <li key={user.id()} data-id={user.id()}>
-                <FollowedUserListItem user={user} />
+                <UserListItem user={user} />
               </li>
             );
           })}
         </ul>
       </div>
     );
-  }
-
-  show() {
-    this.user = app.session.user;
-
-    m.redraw();
   }
 }

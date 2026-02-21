@@ -81,7 +81,8 @@ return [
         ->attributes(Api\AddBasicUserAttributes::class),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(Api\AddUserAttributes::class),
+        ->attributes(Api\AddUserAttributes::class)
+        ->hasMany('followedBy', UserSerializer::class),
 
     (new Extend\ApiController(ListUsersController::class))
         ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
@@ -90,7 +91,7 @@ return [
 
             return $data;
         })
-        ->addInclude(['followedUsers', 'followedBy']),
+        ->addInclude('followedUsers'),
 
     (new Extend\ApiController(ShowUserController::class))
         ->prepareDataForSerialization(Api\LoadRelations::class)
