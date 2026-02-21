@@ -65,7 +65,7 @@ class FollowedUsersFilterTest extends TestCase
                 '/api/users',
                 [
                     'authenticatedAs' => 2,
-                    'queryParams' => [
+                    'queryParams'     => [
                         'filter' => ['followeduser' => '1'],
                     ],
                 ]
@@ -92,7 +92,7 @@ class FollowedUsersFilterTest extends TestCase
                 '/api/users',
                 [
                     'authenticatedAs' => 2,
-                    'queryParams' => [
+                    'queryParams'     => [
                         'filter' => ['-followeduser' => '1'],
                     ],
                 ]
@@ -119,7 +119,7 @@ class FollowedUsersFilterTest extends TestCase
                 '/api/users',
                 [
                     'authenticatedAs' => 5,
-                    'queryParams' => [
+                    'queryParams'     => [
                         'filter' => ['followeduser' => '1'],
                     ],
                 ]
