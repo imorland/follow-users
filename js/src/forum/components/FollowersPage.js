@@ -8,15 +8,18 @@ export default class FollowersPage extends UserPage {
   oninit(vnode) {
     super.oninit(vnode);
 
-    this.refresh();
+    this.loading = true;
+    this.followers = [];
+
+    this.loadUser(m.route.param('username'));
   }
 
-  refresh() {
-    this.loading = true;
-    this.loadUser(app.session.user.username());
-    this.followers = app.session.user.followedBy() || [];
+  show(user) {
+    super.show(user);
 
+    this.followers = user.followedBy() || [];
     this.loading = false;
+
     m.redraw();
   }
 
@@ -50,11 +53,5 @@ export default class FollowersPage extends UserPage {
         </ul>
       </div>
     );
-  }
-
-  show() {
-    this.user = app.session.user;
-
-    m.redraw();
   }
 }

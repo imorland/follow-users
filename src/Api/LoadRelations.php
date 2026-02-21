@@ -25,7 +25,6 @@ class LoadRelations
             ->load('followedUsers');
 
         $data->load('followedUsers');
-        $data->load('followedBy');
 
         return $data;
     }
