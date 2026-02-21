@@ -60,7 +60,7 @@ return [
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(Api\UserResourceFields::class)
         ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
-            return $endpoint->addDefaultInclude(['followedUsers', 'followedBy']);
+            return $endpoint->addDefaultInclude(['followedUsers']);
         })
         ->endpoint(Endpoint\Show::class, function (Endpoint\Show $endpoint) {
             return $endpoint->addDefaultInclude(['followedUsers', 'followedBy']);

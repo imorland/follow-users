@@ -3,11 +3,11 @@ import UserCard from 'flarum/forum/components/UserCard';
 import type User from 'flarum/common/models/User';
 import type Mithril from 'mithril';
 
-interface FollowedUserListItemAttrs {
+interface UserListItemAttrs {
   user: User;
 }
 
-export default class FollowedUserListItem extends Component<FollowedUserListItemAttrs> {
+export default class UserListItem extends Component<UserListItemAttrs> {
   view(): Mithril.Children {
     const { user } = this.attrs;
 

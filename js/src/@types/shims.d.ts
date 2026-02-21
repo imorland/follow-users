@@ -8,5 +8,6 @@ declare module 'flarum/common/models/User' {
     followingCount(): number;
     followerCount(): number;
     followedUsers(): User[];
+    followedBy(): User[];
   }
 }

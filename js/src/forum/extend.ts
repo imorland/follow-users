@@ -18,8 +18,9 @@ export default [
     .attribute<number>('followingCount')
     .attribute<number>('followerCount'),
 
-  new Extend.Routes() //
-    .add('user.followedUsers', '/u/:username/followedUsers', () => import('./components/ProfilePage')),
+  new Extend.Routes()
+    .add('user.followedUsers', '/u/:username/followedUsers', () => import('./components/FollowingPage'))
+    .add('user.followers', '/u/:username/followers', () => import('./components/FollowersPage')),
 
   new Extend.Notification() //
     .add('newFollower', NewFollowerNotification)
