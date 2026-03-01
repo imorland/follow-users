@@ -31,7 +31,7 @@ class AddBasicUserAttributes
 
     public function __invoke(BasicUserSerializer $serializer, User $user, array $attributes): array
     {
-        $attributes['followed'] = FollowState::for($serializer->getActor(), $user);
+        $attributes['followed'] = FollowState::forFromRelation($serializer->getActor(), $user);
 
         if ((bool) $this->settings->get('ianm-follow-users.stats-on-profile')) {
             $attributes['followerCount'] = FollowState::getFollowerCount($user);
