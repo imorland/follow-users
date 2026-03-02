@@ -13,7 +13,9 @@
 namespace IanM\FollowUsers;
 
 use Flarum\Api\Controller\ListDiscussionsController;
+use Flarum\Api\Controller\ListPostsController;
 use Flarum\Api\Controller\ListUsersController;
+use Flarum\Api\Controller\ShowDiscussionController;
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\BasicUserSerializer;
@@ -115,10 +117,19 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowForumController::class))
-        ->addInclude('actor.followedUsers'),
+        ->addInclude('actor.followedUsers')
+        ->prepareDataForSerialization([LoadRelations::class, 'loadForumActorCounts']),
+
+    (new Extend\ApiController(ShowDiscussionController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'countRelation'])
+        ->prepareDataForSerialization([LoadRelations::class, 'loadActorFollows']),
 
     (new Extend\ApiController(ListDiscussionsController::class))
         ->prepareDataForSerialization([LoadRelations::class, 'countRelation']),
+
+    (new Extend\ApiController(ListPostsController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'countRelation'])
+        ->prepareDataForSerialization([LoadRelations::class, 'loadActorFollows']),
 
     (new Extend\Settings())
         ->default('ianm-follow-users.button-on-profile', false)

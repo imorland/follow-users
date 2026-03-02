@@ -14,6 +14,7 @@ namespace IanM\FollowUsers\Api;
 
 use Flarum\Api\Controller\AbstractSerializeController;
 use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
 use Flarum\Http\RequestUtil;
 use Flarum\User\User;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,33 +25,109 @@ class LoadRelations
 {
     public function __invoke(AbstractSerializeController $controller, User $data, ServerRequestInterface $request): User
     {
-        RequestUtil::getActor($request)
-            ->load('followedUsers');
+        $actor = RequestUtil::getActor($request);
 
-        $data->load('followedUsers');
+        if (!$actor->isGuest()) {
+            $actor->loadMissing('followedUsers');
+        }
+
+        $data->loadMissing('followedUsers');
 
         return $data;
     }
 
     /**
-     * Batch-loads follower/following counts onto the User models of
-     * the discussion collection before serialization.
+     * Pre-loads followedUsers on the actor model before serialization.
+     */
+    public static function loadActorFollows($controller, $data, ServerRequestInterface $request): void
+    {
+        $actor = RequestUtil::getActor($request);
+
+        if ($actor->isGuest()) {
+            return;
+        }
+
+        $actor->loadMissing('followedUsers');
+    }
+
+    /**
+     * Batch-loads follower/following counts for the actor and every user in actor.followedUsers before serialization.
+     */
+    public static function loadForumActorCounts($controller, $data, ServerRequestInterface $request): void
+    {
+        $actor = RequestUtil::getActor($request);
+
+        if ($actor->isGuest()) {
+            return;
+        }
+
+        $actor->loadMissing('followedUsers');
+
+        $users = (new Collection([$actor]))
+            ->merge($actor->followedUsers)
+            ->unique('id');
+
+        if ($users->isNotEmpty()) {
+            $users->loadCount(['followedUsers', 'followedBy']);
+
+            foreach ($users as $user) {
+                FollowState::seedCountCache(
+                    (int) $user->id,
+                    (int) ($user->followed_by_count ?? 0),
+                    (int) ($user->followed_users_count ?? 0)
+                );
+            }
+        }
+    }
+
+    /**
+     * prepareDataForSerialization callback for ListDiscussionsController,
+     * ShowDiscussionController, and ListPostsController.
      *
-     * Sets $user->followed_by_count and $user->followed_users_count via
-     * Eloquent's loadCount().
+     * Collects all user models in the payload, runs a single loadCount() for
+     * follower/following counts, and seeds the static FollowState cache.
      */
     public static function countRelation($controller, $data): void
     {
         $users = null;
 
         if ($data instanceof Discussion) {
-            $users = new Collection(array_filter([$data->user, $data->lastPostedUser]));
-        } elseif ($data instanceof Collection) {
             $data->loadMissing(['user', 'lastPostedUser']);
-            $users = new Collection(
-                $data->flatMap(fn($d) => array_filter([$d->user, $d->lastPostedUser]))
-                    ->unique('id')->values()->all()
-            );
+            $discussionUsers = array_filter([$data->user, $data->lastPostedUser]);
+
+            // $data->posts is a plain PHP array containing a mix of Post model
+            // instances and raw integer IDs (for not-yet-loaded positions). Wrap
+            // in collect() and filter to Post instances before mapping to users.
+            $postUsers = $data->relationLoaded('posts')
+                ? collect($data->posts)
+                    ->filter(fn($p) => $p instanceof Post)
+                    ->map(fn($p) => $p->user)
+                    ->filter()
+                    ->all()
+                : [];
+
+            $users = (new Collection(array_merge($discussionUsers, $postUsers)))
+                ->unique('id')
+                ->values();
+        } elseif ($data instanceof Collection) {
+            if ($data->first() instanceof Discussion) {
+                $data->loadMissing(['user', 'lastPostedUser']);
+                $users = new Collection(
+                    $data->flatMap(fn($d) => array_filter([$d->user, $d->lastPostedUser]))
+                        ->unique('id')->values()->all()
+                );
+            }
+
+            if ($data->first() instanceof Post) {
+                $data->loadMissing('user');
+                $users = new Collection(
+                    $data->map(fn($p) => $p->user)
+                        ->filter()
+                        ->unique('id')
+                        ->values()
+                        ->all()
+                );
+            }
         }
 
         if ($users && $users->isNotEmpty()) {
