@@ -81,6 +81,30 @@ class LoadRelations
     }
 
     /**
+     * Pre-loads followedUsers on the actor and batch-loads follower/following counts for the entire user list.
+     */
+   public static function loadUserListCounts($controller, $data, ServerRequestInterface $request): void
+   {
+       $actor = RequestUtil::getActor($request);
+
+       if (!$actor->isGuest()) {
+           $actor->loadMissing('followedUsers');
+       }
+
+       if ($data instanceof Collection) {
+           $data->loadCount(['followedUsers', 'followedBy']);
+
+           foreach ($data as $user) {
+               FollowState::seedCountCache(
+                   (int) $user->id,
+                   (int) ($user->followed_by_count ?? 0),
+                   (int) ($user->followed_users_count ?? 0)
+               );
+           }
+       }
+   }
+
+    /**
      * prepareDataForSerialization callback for ListDiscussionsController,
      * ShowDiscussionController, and ListPostsController.
      *

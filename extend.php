@@ -95,21 +95,7 @@ return [
         ->hasMany('followedBy', UserSerializer::class),
 
     (new Extend\ApiController(ListUsersController::class))
-        ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
-            $actor = RequestUtil::getActor($request);
-            $actor->load('followedUsers');
-            $data->loadCount(['followedUsers', 'followedBy']);
-
-            foreach ($data as $user) {
-                FollowState::seedCountCache(
-                    (int) $user->id,
-                    (int) ($user->followed_by_count ?? 0),
-                    (int) ($user->followed_users_count ?? 0)
-                );
-            }
-
-            return $data;
-        })
+        ->prepareDataForSerialization([LoadRelations::class, 'loadUserListCounts'])
         ->addInclude('followedUsers'),
 
     (new Extend\ApiController(ShowUserController::class))
@@ -117,8 +103,8 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowForumController::class))
-        ->addInclude('actor.followedUsers')
-        ->prepareDataForSerialization([LoadRelations::class, 'loadForumActorCounts']),
+        ->prepareDataForSerialization([LoadRelations::class, 'loadForumActorCounts'])
+        ->addInclude('actor.followedUsers'),
 
     (new Extend\ApiController(ShowDiscussionController::class))
         ->prepareDataForSerialization([LoadRelations::class, 'countRelation'])
