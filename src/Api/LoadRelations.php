@@ -140,9 +140,7 @@ class LoadRelations
                     $data->flatMap(fn($d) => array_filter([$d->user, $d->lastPostedUser]))
                         ->unique('id')->values()->all()
                 );
-            }
-
-            if ($data->first() instanceof Post) {
+            } elseif ($data->first() instanceof Post) {
                 $data->loadMissing('user');
                 $users = new Collection(
                     $data->map(fn($p) => $p->user)
