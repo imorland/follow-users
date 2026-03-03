@@ -26,12 +26,12 @@ use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
-use Flarum\Http\RequestUtil;
 use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use IanM\FollowUsers\Api\LoadRelations;
+use IanM\FollowUsers\Middleware\ResetFollowStateCacheMiddleware;
 
 return [
     (new Extend\Frontend('forum'))
@@ -42,6 +42,9 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
+
+    (new Extend\Middleware('api'))
+        ->add(ResetFollowStateCacheMiddleware::class),
 
     (new Extend\Model(User::class))
         ->relationship('followedUsers', function (User $user) {

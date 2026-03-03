@@ -65,6 +65,16 @@ class FollowState extends AbstractModel
     }
 
     /**
+     * Flush all request-scoped static caches.
+     */
+    public static function resetCaches(): void
+    {
+        self::$followStateCache = [];
+        self::$followerCountCache = [];
+        self::$followingCountCache = [];
+    }
+
+    /**
      * Get the follow user subscription state for the given User.
      * Results are cached for the duration of the request.
      *
