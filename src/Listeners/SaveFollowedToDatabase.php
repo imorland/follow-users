@@ -72,6 +72,7 @@ class SaveFollowedToDatabase
             }
 
             if ($changed) {
+                FollowState::invalidateCache($actor->id, $user->id);
                 $actor->load('followedUsers');
                 $user->load('followedBy');
             }

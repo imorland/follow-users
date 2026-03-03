@@ -53,6 +53,18 @@ class FollowState extends AbstractModel
     }
 
     /**
+     * Invalidate cached state for a follow/unfollow between users.
+     */
+    public static function invalidateCache(int $actorId, int $userId): void
+    {
+        unset(
+            self::$followStateCache[$actorId . ':' . $userId],
+            self::$followerCountCache[$userId],
+            self::$followingCountCache[$actorId]
+        );
+    }
+
+    /**
      * Get the follow user subscription state for the given User.
      * Results are cached for the duration of the request.
      *
