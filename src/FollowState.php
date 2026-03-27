@@ -114,6 +114,7 @@ class FollowState extends AbstractModel
         $key = $actor->id . ':' . $user->id;
 
         if (!array_key_exists($key, self::$followStateCache)) {
+            /** @phpstan-ignore-next-line Access to dynamic relationship property */
             $followed = $actor->followedUsers->first(fn($u) => $u->id === $user->id);
             self::$followStateCache[$key] = $followed ? $followed->pivot->subscription : null;
         }

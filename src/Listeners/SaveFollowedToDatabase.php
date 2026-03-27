@@ -86,6 +86,7 @@ class SaveFollowedToDatabase
      */
     protected function followedUsers(User $user): BelongsToMany
     {
+        /** @phpstan-ignore-next-line Call to dynamic relationship method */
         return $user->followedUsers();
     }
 }

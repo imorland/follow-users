@@ -64,6 +64,7 @@ class LoadRelations
         $actor->loadMissing('followedUsers');
 
         $users = (new Collection([$actor]))
+            /** @phpstan-ignore-next-line Access to dynamic relationship property */
             ->merge($actor->followedUsers)
             ->unique('id');
 

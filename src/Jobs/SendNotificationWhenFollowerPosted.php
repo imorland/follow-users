@@ -40,6 +40,7 @@ class SendNotificationWhenFollowerPosted implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
+        /** @phpstan-ignore-next-line Access to dynamic relationship property */
         if (!$this->post->exists || null === $this->post->user->followedBy) {
             return;
         }
