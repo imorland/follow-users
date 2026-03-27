@@ -58,7 +58,7 @@ class FollowState extends AbstractModel
     public static function invalidateCache(int $actorId, int $userId): void
     {
         unset(
-            self::$followStateCache[$actorId . ':' . $userId],
+            self::$followStateCache[$actorId.':'.$userId],
             self::$followerCountCache[$userId],
             self::$followingCountCache[$actorId]
         );
@@ -85,7 +85,7 @@ class FollowState extends AbstractModel
      */
     public static function for(User $actor, User $user): ?string
     {
-        $key = $actor->id . ':' . $user->id;
+        $key = $actor->id.':'.$user->id;
 
         if (!array_key_exists($key, self::$followStateCache)) {
             $sub = self::where('user_id', $actor->id)->where('followed_user_id', $user->id)->first();
@@ -111,11 +111,11 @@ class FollowState extends AbstractModel
             return self::for($actor, $user);
         }
 
-        $key = $actor->id . ':' . $user->id;
+        $key = $actor->id.':'.$user->id;
 
         if (!array_key_exists($key, self::$followStateCache)) {
             /** @phpstan-ignore-next-line Access to dynamic relationship property */
-            $followed = $actor->followedUsers->first(fn($u) => $u->id === $user->id);
+            $followed = $actor->followedUsers->first(fn ($u) => $u->id === $user->id);
             self::$followStateCache[$key] = $followed ? $followed->pivot->subscription : null;
         }
 
@@ -155,5 +155,4 @@ class FollowState extends AbstractModel
 
         return self::$followerCountCache[$user->id];
     }
-
 }

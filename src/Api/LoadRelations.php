@@ -14,12 +14,12 @@ namespace IanM\FollowUsers\Api;
 
 use Flarum\Api\Controller\AbstractSerializeController;
 use Flarum\Discussion\Discussion;
-use Flarum\Post\Post;
 use Flarum\Http\RequestUtil;
+use Flarum\Post\Post;
 use Flarum\User\User;
-use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Database\Eloquent\Collection;
 use IanM\FollowUsers\FollowState;
+use Illuminate\Database\Eloquent\Collection;
+use Psr\Http\Message\ServerRequestInterface;
 
 class LoadRelations
 {
@@ -84,26 +84,26 @@ class LoadRelations
     /**
      * Pre-loads followedUsers on the actor and batch-loads follower/following counts for the entire user list.
      */
-   public static function loadUserListCounts($controller, $data, ServerRequestInterface $request): void
-   {
-       $actor = RequestUtil::getActor($request);
+    public static function loadUserListCounts($controller, $data, ServerRequestInterface $request): void
+    {
+        $actor = RequestUtil::getActor($request);
 
-       if (!$actor->isGuest()) {
-           $actor->loadMissing('followedUsers');
-       }
+        if (!$actor->isGuest()) {
+            $actor->loadMissing('followedUsers');
+        }
 
-       if ($data instanceof Collection) {
-           $data->loadCount(['followedUsers', 'followedBy']);
+        if ($data instanceof Collection) {
+            $data->loadCount(['followedUsers', 'followedBy']);
 
-           foreach ($data as $user) {
-               FollowState::seedCountCache(
-                   (int) $user->id,
-                   (int) ($user->followed_by_count ?? 0),
-                   (int) ($user->followed_users_count ?? 0)
-               );
-           }
-       }
-   }
+            foreach ($data as $user) {
+                FollowState::seedCountCache(
+                    (int) $user->id,
+                    (int) ($user->followed_by_count ?? 0),
+                    (int) ($user->followed_users_count ?? 0)
+                );
+            }
+        }
+    }
 
     /**
      * prepareDataForSerialization callback for ListDiscussionsController,
@@ -125,8 +125,8 @@ class LoadRelations
             // in collect() and filter to Post instances before mapping to users.
             $postUsers = $data->relationLoaded('posts')
                 ? collect($data->posts)
-                    ->filter(fn($p) => $p instanceof Post)
-                    ->map(fn($p) => $p->user)
+                    ->filter(fn ($p) => $p instanceof Post)
+                    ->map(fn ($p) => $p->user)
                     ->filter()
                     ->all()
                 : [];
@@ -138,13 +138,13 @@ class LoadRelations
             if ($data->first() instanceof Discussion) {
                 $data->loadMissing(['user', 'lastPostedUser']);
                 $users = new Collection(
-                    $data->flatMap(fn($d) => array_filter([$d->user, $d->lastPostedUser]))
+                    $data->flatMap(fn ($d) => array_filter([$d->user, $d->lastPostedUser]))
                         ->unique('id')->values()->all()
                 );
             } elseif ($data->first() instanceof Post) {
                 $data->loadMissing('user');
                 $users = new Collection(
-                    $data->map(fn($p) => $p->user)
+                    $data->map(fn ($p) => $p->user)
                         ->filter()
                         ->unique('id')
                         ->values()
