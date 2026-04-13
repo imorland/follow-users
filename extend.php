@@ -21,7 +21,6 @@ use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
-use IanM\FollowUsers\FollowState;
 
 return [
     (new Extend\Frontend('forum'))

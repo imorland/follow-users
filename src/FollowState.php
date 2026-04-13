@@ -65,7 +65,7 @@ class FollowState extends AbstractModel
      */
     public static function seedCountCache(int $userId, int $followerCount, int $followingCount): void
     {
-        self::$followerCountCache[$userId]  = $followerCount;
+        self::$followerCountCache[$userId] = $followerCount;
         self::$followingCountCache[$userId] = $followingCount;
     }
 
