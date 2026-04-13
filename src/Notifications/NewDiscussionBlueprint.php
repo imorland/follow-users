@@ -62,7 +62,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface, A
     public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('ianm-follow-users.email.new_discussion_by_user.subject', [
-            '{title}' => $this->discussion->title,
+            '{user_display_name}' => $this->discussion->user->display_name,
         ]);
     }
 
