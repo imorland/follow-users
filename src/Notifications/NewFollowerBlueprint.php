@@ -61,7 +61,7 @@ class NewFollowerBlueprint implements BlueprintInterface, MailableInterface, Ale
     public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('ianm-follow-users.email.new_follower.subject', [
-            '{username}' => $this->actor->username,
+            '{follower_display_name}' => $this->actor->display_name,
         ]);
     }
 
