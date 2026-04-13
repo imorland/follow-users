@@ -15,6 +15,7 @@ namespace IanM\FollowUsers\Tests\integration\api;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
@@ -26,6 +27,7 @@ use PHPUnit\Framework\Attributes\Test;
  *
  * The column references must be qualified as `users.id`.
  */
+#[RunTestsInSeparateProcesses]
 class FollowedUsersFilterTest extends TestCase
 {
     use RetrievesAuthorizedUsers;

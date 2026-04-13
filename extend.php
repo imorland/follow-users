@@ -12,13 +12,16 @@
 
 namespace IanM\FollowUsers;
 
+use Flarum\Api\Context;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource;
+use Flarum\Database\Eloquent\Collection;
 use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use IanM\FollowUsers\FollowState;
 
 return [
     (new Extend\Frontend('forum'))
@@ -60,7 +63,43 @@ return [
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(Api\UserResourceFields::class)
         ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
-            return $endpoint->addDefaultInclude(['followedUsers']);
+            return $endpoint
+                ->addDefaultInclude(['followedUsers'])
+                ->beforeSerialization(function (Context $context, array $results) {
+                    $models = Collection::make($results['models']);
+
+                    if ($models->isEmpty()) {
+                        return;
+                    }
+
+                    // Preload groups for every user in one batch query instead
+                    // of one query per user during serialization.
+                    $models->loadMissing('groups');
+
+                    // Preload follower/following counts for every user in a
+                    // single correlated-subquery SELECT, then seed the static
+                    // cache so the field getters never need to COUNT individually.
+                    $models->loadCount(['followedUsers', 'followedBy']);
+                    foreach ($models as $user) {
+                        FollowState::seedCountCache(
+                            (int) $user->id,
+                            (int) ($user->followed_by_count ?? 0),
+                            (int) ($user->followed_users_count ?? 0),
+                        );
+                    }
+
+                    // Preload the actor's follow state for every listed user in
+                    // a single SELECT … WHERE followed_user_id IN (…) query,
+                    // then seed the static cache so FollowState::for() never
+                    // needs to query individually.
+                    $actor = $context->getActor();
+                    if (!$actor->isGuest()) {
+                        FollowState::seedActorFollowStates(
+                            (int) $actor->id,
+                            $models->pluck('id')->map(fn ($id) => (int) $id)->all(),
+                        );
+                    }
+                });
         })
         ->endpoint(Endpoint\Show::class, function (Endpoint\Show $endpoint) {
             return $endpoint->addDefaultInclude(['followedUsers', 'followedBy']);
