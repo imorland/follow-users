@@ -89,7 +89,19 @@ class LoadRelations
         $actor = RequestUtil::getActor($request);
 
         if (!$actor->isGuest()) {
-            $actor->loadMissing('followedUsers');
+            // ->addInclude('followedUsers') runs before prepareDataForSerialization, so the
+            // relation is already loaded on every model in $data — but $actor is a different
+            // PHP object and won't see it as loaded. Transfer the relation when the actor
+            // appears in the collection to avoid a redundant per-actor query.
+            $actorInData = $data instanceof Collection
+                ? $data->first(fn ($u) => (int) $u->id === (int) $actor->id)
+                : null;
+
+            if ($actorInData && $actorInData->relationLoaded('followedUsers')) {
+                $actor->setRelation('followedUsers', $actorInData->getRelation('followedUsers'));
+            } else {
+                $actor->loadMissing('followedUsers');
+            }
         }
 
         if ($data instanceof Collection) {
