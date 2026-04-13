@@ -95,9 +95,9 @@ class ListUsersQueryCountTest extends TestCase
 
         for ($i = 3; $i <= 12; $i++) {
             $users[] = [
-                'id'                => $i,
-                'username'          => "user{$i}",
-                'email'             => "user{$i}@machine.local",
+                'id'                 => $i,
+                'username'           => "user{$i}",
+                'email'              => "user{$i}@machine.local",
                 'is_email_confirmed' => true,
             ];
             $followers[] = [
@@ -122,7 +122,7 @@ class ListUsersQueryCountTest extends TestCase
         return sprintf(
             "%d queries executed:\n%s",
             count($log),
-            implode("\n", array_map(fn ($q) => '  ' . $q['query'], $log))
+            implode("\n", array_map(fn ($q) => '  '.$q['query'], $log))
         );
     }
 }
