@@ -65,9 +65,9 @@ return [
             return $endpoint
                 ->addDefaultInclude(['followedUsers'])
                 ->beforeSerialization(function (Context $context, array $results) {
-                    $models = Collection::make($results['models']);
+                    $models = $results['models'];
 
-                    if ($models->isEmpty()) {
+                    if (!($models instanceof Collection) || $models->isEmpty()) {
                         return;
                     }
 
@@ -81,9 +81,9 @@ return [
                     $models->loadCount(['followedUsers', 'followedBy']);
                     foreach ($models as $user) {
                         FollowState::seedCountCache(
-                            (int) $user->id,
-                            (int) ($user->followed_by_count ?? 0),
-                            (int) ($user->followed_users_count ?? 0),
+                            (int) $user->getKey(),
+                            (int) ($user->getAttribute('followed_by_count') ?? 0),
+                            (int) ($user->getAttribute('followed_users_count') ?? 0),
                         );
                     }
 
@@ -95,7 +95,7 @@ return [
                     if (!$actor->isGuest()) {
                         FollowState::seedActorFollowStates(
                             (int) $actor->id,
-                            $models->pluck('id')->map(fn ($id) => (int) $id)->all(),
+                            $models->map(fn ($u) => (int) $u->getKey())->all(),
                         );
                     }
                 });
