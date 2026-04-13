@@ -16,8 +16,10 @@ use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 
+#[RunTestsInSeparateProcesses]
 class FollowUserTest extends TestCase
 {
     use RetrievesAuthorizedUsers;

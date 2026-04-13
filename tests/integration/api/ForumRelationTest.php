@@ -15,8 +15,10 @@ namespace IanM\FollowUsers\Tests\integration\api;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 
+#[RunTestsInSeparateProcesses]
 class ForumRelationTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
