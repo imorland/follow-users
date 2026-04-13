@@ -41,6 +41,7 @@ class FollowUsersDiscussionFilter implements FilterInterface
         /**
          * @var BelongsToMany $followed
          */
+        /** @phpstan-ignore-next-line Call to dynamic relationship method */
         $followed = $actor->followedUsers();
 
         $query->$method('discussions.id', function (Builder $query) use ($followed) {

@@ -72,6 +72,7 @@ class SaveFollowedToDatabase
             }
 
             if ($changed) {
+                FollowState::invalidateCache($actor->id, $user->id);
                 $actor->load('followedUsers');
                 $user->load('followedBy');
             }
@@ -85,6 +86,7 @@ class SaveFollowedToDatabase
      */
     protected function followedUsers(User $user): BelongsToMany
     {
+        /** @phpstan-ignore-next-line Call to dynamic relationship method */
         return $user->followedUsers();
     }
 }

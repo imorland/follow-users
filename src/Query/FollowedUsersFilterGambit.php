@@ -69,6 +69,7 @@ class FollowedUsersFilterGambit extends AbstractRegexGambit implements FilterInt
     protected function constrain(Builder $query, User $actor, bool $negate)
     {
         $query->where(function ($query) use ($actor, $negate) {
+            /** @phpstan-ignore-next-line Call to dynamic relationship method */
             $ids = $actor->followedUsers()->pluck('users.id');
             if ($negate) {
                 $query->whereNotIn('id', $ids);

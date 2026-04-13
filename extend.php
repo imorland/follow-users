@@ -12,7 +12,10 @@
 
 namespace IanM\FollowUsers;
 
+use Flarum\Api\Controller\ListDiscussionsController;
+use Flarum\Api\Controller\ListPostsController;
 use Flarum\Api\Controller\ListUsersController;
+use Flarum\Api\Controller\ShowDiscussionController;
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\BasicUserSerializer;
@@ -23,11 +26,12 @@ use Flarum\Discussion\Event as DiscussionEvent;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
-use Flarum\Http\RequestUtil;
 use Flarum\User\Event\Saving;
 use Flarum\User\Filter\UserFilterer;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use IanM\FollowUsers\Api\LoadRelations;
+use IanM\FollowUsers\Middleware\ResetFollowStateCacheMiddleware;
 
 return [
     (new Extend\Frontend('forum'))
@@ -39,9 +43,18 @@ return [
 
     new Extend\Locales(__DIR__.'/resources/locale'),
 
+    (new Extend\Middleware('api'))
+        ->add(ResetFollowStateCacheMiddleware::class),
+
     (new Extend\Model(User::class))
-        ->belongsToMany('followedUsers', User::class, 'user_followers', 'user_id', 'followed_user_id')
-        ->belongsToMany('followedBy', User::class, 'user_followers', 'followed_user_id', 'user_id'),
+        ->relationship('followedUsers', function (User $user) {
+            return $user->belongsToMany(User::class, 'user_followers', 'user_id', 'followed_user_id')
+                ->withPivot('subscription');
+        })
+        ->relationship('followedBy', function (User $user) {
+            return $user->belongsToMany(User::class, 'user_followers', 'followed_user_id', 'user_id')
+                ->withPivot('subscription');
+        }),
 
     (new Extend\View())
         ->namespace('ianm-follow-users', __DIR__.'/resources/views'),
@@ -85,12 +98,7 @@ return [
         ->hasMany('followedBy', UserSerializer::class),
 
     (new Extend\ApiController(ListUsersController::class))
-        ->prepareDataForSerialization(function (ListUsersController $controller, $data, $request) {
-            $actor = RequestUtil::getActor($request);
-            $actor->load('followedUsers');
-
-            return $data;
-        })
+        ->prepareDataForSerialization([LoadRelations::class, 'loadUserListCounts'])
         ->addInclude('followedUsers'),
 
     (new Extend\ApiController(ShowUserController::class))
@@ -98,7 +106,19 @@ return [
         ->addInclude(['followedUsers', 'followedBy']),
 
     (new Extend\ApiController(ShowForumController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'loadForumActorCounts'])
         ->addInclude('actor.followedUsers'),
+
+    (new Extend\ApiController(ShowDiscussionController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'countRelation'])
+        ->prepareDataForSerialization([LoadRelations::class, 'loadActorFollows']),
+
+    (new Extend\ApiController(ListDiscussionsController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'countRelation']),
+
+    (new Extend\ApiController(ListPostsController::class))
+        ->prepareDataForSerialization([LoadRelations::class, 'countRelation'])
+        ->prepareDataForSerialization([LoadRelations::class, 'loadActorFollows']),
 
     (new Extend\Settings())
         ->default('ianm-follow-users.button-on-profile', false)
