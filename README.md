@@ -2,8 +2,6 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/ianm/follow-users.svg)](https://packagist.org/packages/ianm/follow-users)
 
-![Extiverse](https://extiverse.com/extension/ianm/follow-users/open-graph-image)
-
 A [Flarum](http://flarum.org) extension. Follow users and be notified of new discussions
 
 Building on top of `fof/follow-tags`, this extension allows for following of individual users.
