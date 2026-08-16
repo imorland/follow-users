@@ -34,16 +34,42 @@ class UserResourceFields
     {
         return [
             // Basic user attributes (available on BasicUserSerializer)
+            //
+            // These getters return a closure rather than a value. The serializer
+            // treats a returned Closure as deferred work: it is queued and only
+            // invoked once every model in the document has been walked (see
+            // Serializer::whenResolved / resolveDeferred). That gives us a point
+            // where the full set of users being serialized is known, so the
+            // first closure to resolve can load follow data for all of them in
+            // one query instead of one query per user.
+            //
+            // This is what makes the batching work on endpoints other than
+            // /api/users — /api/discussions, /api/posts, /api/notifications and
+            // any third-party resource that includes users — none of which can
+            // be reached by the beforeSerialization hook in extend.php, since
+            // that is bound to a single (resource, endpoint) pair.
             Schema\Str::make('followed')
-                ->get(fn (User $user, Context $context) => FollowState::for($context->getActor(), $user)),
+                ->get(function (User $user, Context $context) {
+                    FollowState::willSerialize($context->getActor(), $user);
+
+                    return fn () => FollowState::for($context->getActor(), $user);
+                }),
 
             Schema\Integer::make('followerCount')
                 ->visible(fn (User $user, Context $context) => (bool) $this->settings->get('ianm-follow-users.stats-on-profile'))
-                ->get(fn (User $user, Context $context) => FollowState::getFollowerCount($user)),
+                ->get(function (User $user, Context $context) {
+                    FollowState::willSerialize($context->getActor(), $user);
+
+                    return fn () => FollowState::getFollowerCount($user);
+                }),
 
             Schema\Integer::make('followingCount')
                 ->visible(fn (User $user, Context $context) => (bool) $this->settings->get('ianm-follow-users.stats-on-profile'))
-                ->get(fn (User $user, Context $context) => FollowState::getFollowingCount($user)),
+                ->get(function (User $user, Context $context) {
+                    FollowState::willSerialize($context->getActor(), $user);
+
+                    return fn () => FollowState::getFollowingCount($user);
+                }),
 
             // User-level attributes (available on UserSerializer)
             Schema\Boolean::make('canBeFollowed')

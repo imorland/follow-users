@@ -55,6 +55,14 @@ return [
     (new Extend\User())
         ->registerPreference('blocksFollow', 'boolval', false),
 
+    // FollowState memoises per-request; a persistent runtime reuses the process,
+    // so the caches have to be cleared explicitly for each request.
+    (new Extend\Middleware('api'))
+        ->add(Middleware\FlushFollowStateCache::class),
+
+    (new Extend\Middleware('forum'))
+        ->add(Middleware\FlushFollowStateCache::class),
+
     (new Extend\Policy())
         ->modelPolicy(User::class, Access\UserPolicy::class),
 
