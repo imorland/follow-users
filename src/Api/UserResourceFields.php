@@ -114,13 +114,34 @@ class UserResourceFields
                 }),
 
             // Relationships
+            //
+            // The "who I follow" list is owner-only: the profile UI only ever
+            // renders it on your own profile (addProfilePage gates the nav item
+            // behind isActor). Scoping it here rather than on the default
+            // includes means the API enforces it regardless of what a client
+            // explicitly requests. See issue #58.
             Schema\Relationship\ToMany::make('followedUsers')
                 ->includable()
+                ->visible(fn (User $user, Context $context) => $this->canSeeFollowedUsers($user, $context))
                 ->type('users'),
 
             Schema\Relationship\ToMany::make('followedBy')
                 ->includable()
                 ->type('users'),
         ];
+    }
+
+    /**
+     * The list of users someone follows is private to that user (and admins).
+     */
+    protected function canSeeFollowedUsers(User $user, Context $context): bool
+    {
+        $actor = $context->getActor();
+
+        if ($actor->isGuest()) {
+            return false;
+        }
+
+        return (int) $actor->id === (int) $user->id || $actor->isAdmin();
     }
 }
