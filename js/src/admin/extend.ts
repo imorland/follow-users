@@ -8,6 +8,15 @@ export default [
   new Extend.Admin() //
     .permission(
       () => ({
+        icon: 'fas fa-user-plus',
+        label: app.translator.trans('ianm-follow-users.admin.permissions.follow_label'),
+        permission: 'user.follow',
+      }),
+      'reply',
+      96
+    )
+    .permission(
+      () => ({
         icon: 'fas fa-user-friends',
         label: app.translator.trans('ianm-follow-users.admin.permissions.be_followed_label'),
         permission: 'user.beFollowed',
