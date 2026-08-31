@@ -12,6 +12,7 @@
 
 namespace IanM\FollowUsers\Tests\integration\api;
 
+use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
@@ -41,6 +42,13 @@ class FollowRelationshipVisibilityTest extends TestCase
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true],
                 ['id' => 4, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true],
+                ['id' => 5, 'username' => 'mod', 'email' => 'mod@machine.local', 'is_email_confirmed' => true],
+            ],
+            'group_user' => [
+                ['user_id' => 5, 'group_id' => Group::MODERATOR_ID],
+            ],
+            'group_permission' => [
+                ['group_id' => Group::MODERATOR_ID, 'permission' => 'user.viewFollowedUsers'],
             ],
             'user_followers' => [
                 // user 3 follows user 4
@@ -110,14 +118,36 @@ class FollowRelationshipVisibilityTest extends TestCase
     }
 
     #[Test]
+    public function followed_users_is_visible_to_users_with_the_permission()
+    {
+        // User 5 is a moderator, granted user.viewFollowedUsers above.
+        $json = $this->showUser(3, 5, 'followedUsers');
+
+        $this->assertArrayHasKey('followedUsers', $json['data']['relationships']);
+
+        $ids = array_column($json['data']['relationships']['followedUsers']['data'], 'id');
+        $this->assertContains('4', $ids);
+    }
+
+    #[Test]
     public function followed_users_is_visible_to_admins()
     {
+        // Not a special case in the policy — admins pass every permission check.
         $json = $this->showUser(3, 1, 'followedUsers');
 
         $this->assertArrayHasKey('followedUsers', $json['data']['relationships']);
 
         $ids = array_column($json['data']['relationships']['followedUsers']['data'], 'id');
         $this->assertContains('4', $ids);
+    }
+
+    #[Test]
+    public function followed_users_is_hidden_from_a_user_whose_group_lacks_the_permission()
+    {
+        // User 2 is an ordinary member with no viewFollowedUsers grant.
+        $json = $this->showUser(3, 2, 'followedUsers');
+
+        $this->assertArrayNotHasKey('followedUsers', $json['data']['relationships'] ?? []);
     }
 
     // --- followedBy: intentionally public ----------------------------------

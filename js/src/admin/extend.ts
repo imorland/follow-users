@@ -15,6 +15,15 @@ export default [
       'reply',
       95
     )
+    .permission(
+      () => ({
+        icon: 'fas fa-user-secret',
+        label: app.translator.trans('ianm-follow-users.admin.permissions.view_followed_users_label'),
+        permission: 'user.viewFollowedUsers',
+      }),
+      'moderate',
+      94
+    )
     .setting(() => ({
       label: app.translator.trans('ianm-follow-users.admin.settings.button-on-profile-label'),
       type: 'bool',
