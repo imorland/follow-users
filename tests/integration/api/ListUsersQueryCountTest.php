@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\Test;
  * The two tests seed different numbers of users but assert the SAME query ceiling,
  * proving the count is constant (O(1)) regardless of list size.
  *
- * --- Query budget breakdown (ceiling = 15) ---
+ * --- Query budget breakdown (ceiling = 12) ---
  *
  *  5  fixed request overhead: actor lookup, last_seen update, actor groups,
  *     list SELECT, pagination COUNT
@@ -40,8 +40,9 @@ use PHPUnit\Framework\Attributes\Test;
  *  2  notification counts  unreadNotificationCount + newNotificationCount for the actor
  *     (visible-to-self fields in core UserResource; not present in 1.x BasicUserSerializer)
  *  1  followedUsers include batch
+ *  1  asset revisions  core's AddAssetsRevisionHeader stamps every API response (core 2.0.1+)
  * ---
- * 11  total (access_tokens queries from the 2.x test framework are excluded as infrastructure noise)
+ * 12  total (access_tokens queries from the 2.x test framework are excluded as infrastructure noise)
  */
 #[RunTestsInSeparateProcesses]
 class ListUsersQueryCountTest extends TestCase
@@ -100,7 +101,7 @@ class ListUsersQueryCountTest extends TestCase
 
         $log = $this->queryCountForUserList();
 
-        $this->assertLessThanOrEqual(11, count($log), $this->formatQueryLog($log));
+        $this->assertLessThanOrEqual(12, count($log), $this->formatQueryLog($log));
     }
 
     #[Test]
@@ -130,7 +131,7 @@ class ListUsersQueryCountTest extends TestCase
 
         $log = $this->queryCountForUserList();
 
-        $this->assertLessThanOrEqual(11, count($log), $this->formatQueryLog($log));
+        $this->assertLessThanOrEqual(12, count($log), $this->formatQueryLog($log));
     }
 
     private function formatQueryLog(array $log): string
