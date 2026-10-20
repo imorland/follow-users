@@ -12,7 +12,6 @@
 
 namespace IanM\FollowUsers\Api;
 
-use Carbon\Carbon;
 use Flarum\Api\Context;
 use Flarum\Api\Schema;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -95,11 +94,15 @@ class UserResourceFields
                             'followed_user_id' => $user->id,
                         ], [
                             'subscription' => $subscription,
-                            'updated_at'   => Carbon::now(),
                         ]);
 
-                        $this->events->dispatch(new Following($actor, $user, $subscription));
-                        $changed = $state->wasChanged();
+                        // Re-sending the current subscription writes nothing, and
+                        // must not announce a follow that didn't happen (#62).
+                        $changed = $state->wasRecentlyCreated || $state->wasChanged('subscription');
+
+                        if ($changed) {
+                            $this->events->dispatch(new Following($actor, $user, $subscription));
+                        }
                     } elseif ($exists) {
                         // Removing follow
                         $this->events->dispatch(new Unfollowing($actor, $user));

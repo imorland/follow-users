@@ -27,7 +27,13 @@ class FollowState extends AbstractModel
 {
     protected $table = 'user_followers';
 
-    protected $fillable = ['user_id', 'followed_user_id', 'subscription', 'updated_at'];
+    /**
+     * Let Eloquent stamp the timestamps, so updated_at only moves when the
+     * subscription actually changes. See issue #62.
+     */
+    public $timestamps = true;
+
+    protected $fillable = ['user_id', 'followed_user_id', 'subscription'];
 
     protected $casts = [
         'created_at' => 'datetime',
