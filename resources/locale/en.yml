@@ -141,3 +141,11 @@ ianm-follow-users:
     gambits:
       followeduser:
         key: followeduser
+
+core:
+  email:
+    notification:
+      types:
+        newDiscussionByUser: New discussions from people you follow
+        newFollower: New followers
+        newPostByUser: New posts from people you follow
