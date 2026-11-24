@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "flarum/core": "^2.0.0",
+        "flarum/core": "2.x-dev",
         "fof/follow-tags": "^2.0.0"
     },
     "authors": [
@@ -57,15 +57,18 @@
                 "githubActions": true,
                 "backendTesting": true
             }
+        },
+        "branch-alias": {
+            "dev-2.x": "2.x-dev"
         }
     },
     "require-dev": {
-        "flarum/phpstan": "^2.0.0",
-        "flarum/testing": "^2.0.0",
-        "flarum/approval": "^2.0.0",
+        "flarum/phpstan": "^2.1.0-beta.1",
+        "flarum/testing": "^2.1.0-beta.1",
+        "flarum/approval": "^2.1.0-beta.1",
         "fof/user-directory": "^2.0.0",
-        "flarum/gdpr": "^2.0.0",
-        "flarum/suspend": "^2.0.0"
+        "flarum/gdpr": "^2.1.0-beta.1",
+        "flarum/suspend": "^2.1.0-beta.1"
     },
     "autoload-dev": {
         "psr-4": {
@@ -90,6 +93,6 @@
         "test:setup": "Sets up a database for use with integration tests. Execute this only once.",
         "analyse:phpstan": "Run static analysis"
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
