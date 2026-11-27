@@ -1,5 +1,0 @@
-import { BooleanGambit } from 'flarum/common/query/IGambit';
-export default class FollowedUsersGambit extends BooleanGambit {
-    key(): string;
-    filterKey(): string;
-}

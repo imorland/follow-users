@@ -6,6 +6,10 @@ export default class FollowedUsersGambit extends BooleanGambit {
     return app.translator.trans('ianm-follow-users.lib.gambits.followeduser.key', {}, true);
   }
 
+  canonicalKey() {
+    return 'followeduser';
+  }
+
   filterKey() {
     return 'followeduser';
   }
