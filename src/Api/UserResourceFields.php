@@ -78,14 +78,21 @@ class UserResourceFields
             Schema\Str::make('followUsers')
                 ->writable(fn (User $user, Context $context) => $context->updating() && !$context->getActor()->isGuest())
                 ->nullable()
+                ->in(['follow', 'lurk', 'unfollow'])
                 ->set(function (User $user, ?string $subscription, Context $context) {
                     $actor = $context->getActor();
                     $actor->assertRegistered();
 
+                    // Laravel skips the `in` rule for blank strings, whitespace
+                    // included, so those arrive here unvalidated.
+                    if ($subscription === null || trim($subscription) === '' || $subscription === 'unfollow') {
+                        $subscription = null;
+                    }
+
                     $exists = $actor->followedUsers()->where('followed_user_id', $user->id)->exists();
                     $changed = false;
 
-                    if (!empty($subscription)) {
+                    if ($subscription !== null) {
                         // Adding or updating follow
                         $actor->assertCan('follow', $user);
 
