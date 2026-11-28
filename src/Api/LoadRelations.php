@@ -23,7 +23,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class LoadRelations
 {
-    public function __invoke(AbstractSerializeController $controller, User $data, ServerRequestInterface $request): User
+    public function __invoke(AbstractSerializeController $controller, User $data, ServerRequestInterface $request): void
     {
         $actor = RequestUtil::getActor($request);
 
@@ -32,8 +32,6 @@ class LoadRelations
         }
 
         $data->loadMissing('followedUsers');
-
-        return $data;
     }
 
     /**
