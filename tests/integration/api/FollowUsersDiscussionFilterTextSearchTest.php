@@ -32,7 +32,7 @@ class FollowUsersDiscussionFilterTextSearchTest extends TestCase
         $this->extension('ianm-follow-users');
 
         $this->prepareDatabase([
-            User::class => [$this->normalUser()],
+            User::class      => [$this->normalUser()],
             'user_followers' => [
                 ['id' => 1, 'user_id' => 2, 'followed_user_id' => 3, 'subscription' => 'follow', 'created_at' => '2024-01-01 00:00:00', 'updated_at' => '2024-01-01 00:00:00'],
             ],
