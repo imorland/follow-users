@@ -61,7 +61,7 @@
     },
     "require-dev": {
         "flarum/phpstan": "*",
-        "flarum/testing": "*",
+        "flarum/testing": "^1.0",
         "flarum/approval": "*",
         "fof/user-directory": "*",
         "flarum/gdpr": "dev-main"

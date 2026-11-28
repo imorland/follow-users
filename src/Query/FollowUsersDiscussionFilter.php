@@ -36,18 +36,16 @@ class FollowUsersDiscussionFilter implements FilterInterface
             return;
         }
 
-        $method = $negate ? 'orWhereIn' : 'whereIn';
-
         /**
          * @var BelongsToMany $followed
          */
         /** @phpstan-ignore-next-line Call to dynamic relationship method */
         $followed = $actor->followedUsers();
 
-        $query->$method('discussions.id', function (Builder $query) use ($followed) {
+        $query->whereIn('discussions.id', function (Builder $query) use ($followed) {
             $query->select('id')
                 ->from('discussions')
                 ->whereIn('user_id', $followed->pluck('users.id')->toArray());
-        });
+        }, 'and', $negate);
     }
 }
